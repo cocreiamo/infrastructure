@@ -15,7 +15,6 @@ pending = [
   "test_R10_state_never_stored_in_clear",
   "test_R11_state_store_not_public",
   "test_R12_state_store_and_keys_not_removable",
-  "test_R13_no_secret_in_clear_in_repository",
   "test_R14_no_key_material_outside_key_service",
   "test_R15_no_stored_credential_for_federated_platform",
   "test_R16_1_pull_request_cannot_decrypt_write_secrets",
