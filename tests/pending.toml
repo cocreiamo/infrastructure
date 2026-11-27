@@ -37,7 +37,6 @@ pending = [
   "test_R31_earlier_state_restorable",
   "test_R32_procedures_written",
   "test_R33_expired_credential_fails_clearly",
-  "test_R34_no_client_name_in_clear",
   "test_R35_nothing_by_hand_undeclared",
   "test_R36_deadlines_watched",
   "test_R37_credentials_rotate",

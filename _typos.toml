@@ -1,2 +1,2 @@
 [files]
-extend-exclude = [".cache/", "LICENSE", "LICENSES/", "*.lock"]
+extend-exclude = [".cache/", "LICENSE", "LICENSES/", "*.lock", "*.enc.yaml"]
