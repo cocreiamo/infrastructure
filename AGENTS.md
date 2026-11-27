@@ -26,6 +26,11 @@ Read `docs/adr/` (index in `docs/adr/README.md`) before proposing anything. The 
 | Procedures                              | `docs/runbooks/`                |
 | Requirements and their verifications    | `model/infrastructure.sysml`    |
 | Known gaps and defects of what we adopt | `gaps.toml`                     |
+| Things configured by hand               | `configured-by-hand.yaml`       |
+| Deadlines no platform reminds of        | `deadlines.yaml`                |
+| Tenants: codename to real names         | `tenants.enc.yaml`, encrypted   |
+| Credentials of the platforms            | `secrets/`, encrypted           |
+| How personal data is processed          | `docs/privacy/`                 |
 | Tool versions                           | `mise.toml` and `mise.lock`     |
 | Generated files                         | written by `mise run generate`  |
 | Tests not yet written                   | `tests/pending.toml`, generated |

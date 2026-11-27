@@ -218,3 +218,48 @@ def test_deadlines_register_well_formed():
             assert entry["tenant"] in codenames, entry
     dates = [entry["expires"] for entry in entries]
     assert dates == sorted(dates), "deadlines are listed by date"
+
+
+def encrypted_files():
+    return sorted(
+        (name, path) for name, path in repository_files() if name.endswith(".enc.yaml")
+    )
+
+
+def test_R13_no_secret_in_clear_in_repository():
+    rules = yaml.safe_load((ROOT / ".sops.yaml").read_text())["creation_rules"]
+    files = encrypted_files()
+    assert files, "no encrypted file found"
+    for name, path in files:
+        content = yaml.safe_load(path.read_text())
+        metadata = content.pop("sops")
+        # Encrypted with the key the rules give this path, and with nothing else.
+        matching = [r for r in rules if re.search(r["path_regex"], name)]
+        assert matching, f"{name}: no rule in .sops.yaml"
+        keys = {k["resource_id"] for k in metadata["gcp_kms"]}
+        assert keys == {matching[0]["gcp_kms"]}, f"{name}: {keys}"
+        for other in ("age", "pgp", "kms", "azure_kv", "hc_vault"):
+            assert not metadata.get(other), f"{name}: also encrypted with {other}"
+        for leaf in leaves(content):
+            assert str(leaf).startswith("ENC["), f"{name}: a value in clear"
+
+    # Nothing that looks like a secret in any commit.
+    result = subprocess.run(
+        ["gitleaks", "git", "--no-banner", "--redact"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_by_hand_register_well_formed():
+    """The register of R35 can be read: every entry says what and why."""
+    register = yaml.safe_load((ROOT / "configured-by-hand.yaml").read_text())
+    assert register, "the register is empty"
+    for section, entries in register.items():
+        assert entries, section
+        for entry in entries:
+            assert set(entry) == {"what", "why"}, f"{section}: {entry}"
+            assert entry["what"] and entry["why"], f"{section}: {entry}"

@@ -1,0 +1,94 @@
+# Everything configured by hand on a managed platform (requirement R35). Rule: nothing configured by hand stays
+# undeclared here. An entry leaves this file when the code adopts it.
+#
+# No secret and no identifier of an account or a resource: names and reasons only. A tenant is named by its
+# codename (ADR-0011). Carried over from the previous repository on 2026-11-27 and to be confirmed platform by
+# platform as each is adopted; the entries about the cluster, the registry and the runners of that repository
+# are gone with them.
+#
+# Each entry: what it is, and why it is not described as code.
+
+secrets_and_keys:
+  - what: the first credential of each platform (the token or App key the code itself authenticates with)
+    why: something must exist before the code can run; it is created in the platform's console and stored in secrets/
+  - what: the Cloudflare token that creates the other Cloudflare tokens
+    why: a token created by another token may not manage tokens (verified on 2026-11-01 in the previous repository; to verify again)
+  - what: the Cloudflare account global API key, never used by the code
+    why: it belongs to the founder's sign-in
+
+created_by_hand_to_import:
+  - what: this repository
+    why: it had to exist before its own settings could be described (ADR-0009); created on 2026-11-27
+  - what: the Google Cloud project that holds state and keys, its key ring and three keys
+    why: the secrets of the previous repository had to be re-encrypted before anything else (ADR-0009); created on 2026-11-27
+  - what: the rules of the main branch and the security settings of this repository
+    why: the guardrails came before the code; applied on 2026-11-27 from .github/rulesets/main.json
+
+cloudflare:
+  - what: the certificate authority of the account for SSH access
+    why: the provider has no resource for it; not used while no machine exists
+  - what: the Cloudflare One Client enrolled on the founder's workstation
+    why: it is a device, not a resource
+  - what: the budget alert created by Cloudflare and the alert for leaked service tokens
+    why: the provider rejects these two alert types
+  - what: the built-in sign-in method of Zero Trust, limited to account members
+    why: created by Cloudflare, cannot be removed
+  - what: reports of mail authentication (DMARC) enabled on every zone
+    why: the provider has no resource for it; enabled in the dashboard
+  - what: domain registrations at Cloudflare Registrar
+    why: the registrar has no interface to manage registrations
+
+domain_registrars:
+  - what: registrations at Namecheap, GoDaddy and Hostinger, with auto-renew on for every domain that is kept
+    why: none of them is managed by the code; the dates are in deadlines.yaml
+
+hosting:
+  - what: shared hosting at Hostinger of the sites of two tenants, left to expire
+    why: it is being left; its deadline is in deadlines.yaml
+  - what: the Hostinger application installed on the GitHub organization for selected repositories, and an SSH key of Hostinger on the founder's GitHub account
+    why: both go when the two sites leave Hostinger
+
+github:
+  - what: "organization settings without an interface: two-factor sign-in required with secure methods only, personal access tokens forbidden, spending limits at zero"
+    why: GitHub offers no interface for them
+  - what: how long logs and artifacts of Actions are kept
+    why: the provider has no resource for it
+  - what: the GitHub Apps of the organization, their permissions and their private keys
+    why: an App and its key can only be created in the browser; which repositories an installation sees is described by the code
+  - what: the third-party applications installed on the organization
+    why: installing one is an act of the owner in the browser
+  - what: the archived repositories
+    why: nothing changes on them, and GitHub refuses to read their settings
+
+google_workspace:
+  - what: domain-wide delegation of the two service accounts of the pipeline
+    why: the Admin console has no interface for it; to be redone for the new service accounts (ADR-0009)
+  - what: recovery email and phone of the founder
+    why: personal data, never in git
+  - what: the organizational unit and the role assignments that Google creates by itself
+    why: managed by Google
+  - what: the rules of the alert center
+    why: no interface
+
+google_cloud:
+  - what: the billing account and its payment profile
+    why: no interface; the roles on it are described by the code
+  - what: the consent screen and the client of the Google sign-in used by Cloudflare Access
+    why: to be created again in the new project (ADR-0009); the client secret is a secret of secrets/
+
+amazon_web_services:
+  - what: the root user and its passkey
+    why: it is the owner's sign-in
+  - what: the request to leave the mail sandbox
+    why: made in the console; it was under review on 2026-11-10
+
+healthchecks_io:
+  - what: the project and its email integration
+    why: no interface to write them
+
+not_adopted:
+  # Evaluated and left out on purpose, so that nobody proposes them again without a new reason.
+  - what: a nightly copy of the encrypted state somewhere else
+    why: every unit keeps its import declarations, so a lost state is rebuilt by adopting again what exists; a second copy adds a place to protect, not safety
+  - what: Cloudflare alerts for certificate transparency and for zone changes
+    why: certificates renew every few weeks and the alert becomes noise; a zone changed by hand already shows in the drift check
