@@ -8,7 +8,10 @@ import json
 import re
 import subprocess
 import tomllib
+from datetime import date
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 COMMIT = re.compile(r"[0-9a-f]{40}")
@@ -124,3 +127,94 @@ def test_R6_generated_files_current():
         text=True,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+CODENAME = re.compile(r"[a-z]+-[a-z]+")
+# The one name that cannot be hidden: it is in the address of the repository (ADR-0011).
+ORGANIZATION = "cocreiamo"
+
+
+def leaves(value):
+    if isinstance(value, dict):
+        for item in value.values():
+            yield from leaves(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from leaves(item)
+    else:
+        yield value
+
+
+def tenant_map():
+    return yaml.safe_load((ROOT / "tenants.enc.yaml").read_text())
+
+
+def test_R34_no_client_name_in_clear():
+    # Keys are in the key service only: a rule with another kind of key would
+    # let a file be read with a key kept somewhere else.
+    rules = yaml.safe_load((ROOT / ".sops.yaml").read_text())["creation_rules"]
+    for rule in rules:
+        assert set(rule) == {"path_regex", "gcp_kms"}, rule
+
+    # The map: codenames in clear, every value encrypted.
+    tenants = tenant_map()
+    metadata = tenants.pop("sops")
+    assert metadata["gcp_kms"], "the map is encrypted with the key service"
+    assert set(metadata) & {"age", "pgp", "kms", "azure_kv", "hc_vault"} <= {
+        k for k in metadata if not metadata[k]
+    }, "the map is encrypted with the key service only"
+    assert tenants, "no tenant in the map"
+    for codename, values in tenants.items():
+        assert CODENAME.fullmatch(codename), codename
+        for leaf in leaves(values):
+            assert str(leaf).startswith("ENC["), f"{codename}: a value in clear"
+
+    # Where the map can be decrypted (the maintainer's machine; the pipeline
+    # once its plan identity exists), no real name appears in any other file.
+    decrypted = subprocess.run(
+        ["sops", "decrypt", str(ROOT / "tenants.enc.yaml")],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if decrypted.returncode != 0:
+        return
+    names = {
+        str(leaf).lower()
+        for leaf in leaves(yaml.safe_load(decrypted.stdout))
+        if ORGANIZATION not in str(leaf).lower()
+    }
+    found = {}
+    for name, path in repository_files():
+        try:
+            text = path.read_text().lower()
+        except UnicodeDecodeError:
+            continue
+        hits = sorted(n for n in names if n in text)
+        if hits:
+            found[name] = len(hits)
+    assert not found, f"real names of tenants in clear (file: how many): {found}"
+
+
+def test_deadlines_register_well_formed():
+    """The register of R36 can be read: R36 itself is verified by the pipeline."""
+    codenames = set(tenant_map()) - {"sops"}
+    entries = yaml.safe_load((ROOT / "deadlines.yaml").read_text())
+    assert entries, "no deadline"
+    for entry in entries:
+        assert (
+            {"what", "expires", "renew"}
+            <= set(entry)
+            <= {
+                "what",
+                "expires",
+                "renew",
+                "tenant",
+            }
+        ), entry
+        assert isinstance(entry["expires"], date), entry
+        if "tenant" in entry:
+            assert entry["tenant"] in codenames, entry
+    dates = [entry["expires"] for entry in entries]
+    assert dates == sorted(dates), "deadlines are listed by date"

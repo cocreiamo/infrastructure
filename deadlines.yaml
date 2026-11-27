@@ -1,0 +1,63 @@
+# Deadlines that no platform reminds us of (requirement R36). A tenant is named only by its codename (ADR-0011);
+# "domain 1" is the first domain of that tenant in tenants.enc.yaml.
+# Carried over from the previous repository on 2026-11-27: each date is to be confirmed when its resource is adopted.
+# Fields: what, expires (YYYY-MM-DD), renew (what to do), and tenant when the deadline belongs to one.
+- what: domain 1, registered at Namecheap, auto-renew
+  tenant: hidden-quartz
+  expires: 2026-12-26
+  renew: check that the renewal happened
+- what: domain 1, registered at Namecheap, auto-renew
+  tenant: mellow-river
+  expires: 2027-01-14
+  renew: check that the renewal happened
+- what: mail transport policy (MTA-STS) of domain 1 still in testing mode
+  tenant: mellow-river
+  expires: 2027-01-15
+  renew: read the TLS reports; with no failure, set the policy to enforce
+- what: domain 1, registered at GoDaddy, auto-renew
+  tenant: nimble-harbor
+  expires: 2027-02-03
+  renew: check that the renewal happened
+- what: SMTP credential of the mail sender, rotated by the code every 90 days
+  expires: 2027-02-09
+  renew: merge the change that rotates it
+- what: domain 1, registered at GoDaddy, auto-renew
+  tenant: silver-falcon
+  expires: 2027-02-21
+  renew: check that the renewal happened
+- what: domain 1, registered at Hostinger, auto-renew
+  tenant: swift-lagoon
+  expires: 2027-04-14
+  renew: check that the renewal happened
+- what: shared hosting of two tenants' sites at Hostinger, left to expire
+  expires: 2027-04-14
+  renew: none; move the two sites elsewhere before this date
+- what: domain 1, registered at GoDaddy, auto-renew
+  tenant: clever-meadow
+  expires: 2027-07-29
+  renew: check that the renewal happened
+- what: domain 2, registered at Cloudflare Registrar, auto-renew
+  tenant: clever-meadow
+  expires: 2027-09-25
+  renew: check that the renewal happened
+- what: Cloudflare account global API key (never used by the code), yearly rotation
+  expires: 2027-10-29
+  renew: rotate it in the Cloudflare dashboard
+- what: Cloudflare token that creates the other tokens
+  expires: 2027-11-01
+  renew: renew it before it expires; without it no token can be rotated
+- what: Mailtrap API tokens, the one that reads and the one that changes
+  expires: 2027-11-01
+  renew: create new tokens in Mailtrap and replace the two secrets
+- what: private keys of the GitHub Apps, yearly rotation (GitHub never expires a key)
+  expires: 2027-11-10
+  renew: generate a new key for each App, replace the secret, delete the old key
+- what: Hetzner project token (no expiry there), yearly rotation
+  expires: 2027-11-10
+  renew: create a new token in the Hetzner console, replace the secret, delete the old one
+- what: Healthchecks.io API keys (no expiry there), yearly rotation
+  expires: 2027-11-10
+  renew: create new keys in the console and replace the secrets
+- what: client secret of the Google sign-in used by Cloudflare Access, yearly rotation
+  expires: 2027-11-10
+  renew: create a new client secret in Google Cloud and replace the secret

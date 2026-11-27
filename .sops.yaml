@@ -1,0 +1,12 @@
+# Which key encrypts which file (ADR-0005, ADR-0011). Keys are in Google Cloud KMS only: no age, no PGP.
+# SOPS encrypts values and leaves key names in clear.
+creation_rules:
+  # Codename -> real names of each tenant; the pull request identity must read it to plan.
+  - path_regex: ^tenants\.enc\.yaml$
+    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
+  # Credentials that only read.
+  - path_regex: ^secrets/plan\.enc\.yaml$
+    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
+  # Credentials that can change resources: only the identity that applies from main.
+  - path_regex: ^secrets/apply\.enc\.yaml$
+    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-apply

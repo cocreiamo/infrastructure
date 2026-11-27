@@ -1,0 +1,34 @@
+swift-lagoon:
+    name: ENC[AES256_GCM,data:zdY3UbqI/OtIpToCF8u+i6E=,iv:oUVOgy8en3erS7T1mN2cc3FV+RHKPHEjU90LYW3QgV8=,tag:IgL9Ro1v1gkU50v4I6tQrw==,type:str]
+    domains:
+        - ENC[AES256_GCM,data:MENMVB3XVHjfPVAbORk=,iv:sZyAyu0O3m3vtLM98uyBFzRHMt2tfw3JW9ixMOs7ZJQ=,tag:SHq+Ng0jYYLtSpYuIaqfvA==,type:str]
+mellow-river:
+    name: ENC[AES256_GCM,data:/PSTJNYxdy4s,iv:OLPgJcrIKD9B16K7bqa7UT2vJRi6Zcq6/2UeOLTQQOo=,tag:kjGFrzLI4oOShz+28BLg5w==,type:str]
+    domains:
+        - ENC[AES256_GCM,data:Bqbrz5rA47ptK9A4Xw==,iv:Yw754LS8Ly1yytCtICFw+JiPV98ARLSn/JSnde3+q0c=,tag:TE3YPJ7QYsGwNLmRLDWDkQ==,type:str]
+nimble-harbor:
+    name: ENC[AES256_GCM,data:BqREVxofFvySdc4/2gc=,iv:WIQF7GtiVzPv29E3ZEjGC5xNhj/DpU5XdzrXJWOJ3QM=,tag:C47shzlzD6Lwf9E5bXIOKA==,type:str]
+    domains:
+        - ENC[AES256_GCM,data:TJSX4ovw6LNAwOS4RfyX+g==,iv:3Bv+8L8JbiSZTIM31wIH24zO9zKmRHQye/gvl4MH5iY=,tag:8lre2Poe67W+nCC0FD0K2g==,type:str]
+silver-falcon:
+    name: ENC[AES256_GCM,data:rU/DELQ5rvDT03sa,iv:aIGPKsJI0H17XJo3uvtlclQGj0/XkTG05nxwfMHAg5s=,tag:o+sz64SF9v5xgsp3GnFQTg==,type:str]
+    domains:
+        - ENC[AES256_GCM,data:JYRQnYYuhMmNvOBiDpM=,iv:pP+xZPD2u/IgglSA6/K3KdWScqCzFNwZsB2JNT2oWio=,tag:Sb9YL8h/skf3mMBceHxcgw==,type:str]
+clever-meadow:
+    name: ENC[AES256_GCM,data:Tbscb6j6,iv:zLZn9V4QuDIFx/r5B8tVQHrywltAnplFIxosV9Km/tY=,tag:vUmCNuxliYTjXqhk+1OX7A==,type:str]
+    domains:
+        - ENC[AES256_GCM,data:IzhzTgXIafU2,iv:7lGRP2L6GVOnsVEuOqotqYTzFNnQOspeEhe/Qkt2+x4=,tag:TQKzMnXgMFT2gH9F9eS7Og==,type:str]
+        - ENC[AES256_GCM,data:nVUJD0RgQ/FbfQ==,iv:lcCd+bfnXlrgQk1eYwqNWu6XOGgWnteQfaTfGvt71kU=,tag:yF2haLGAbXTifIN0kpAcGA==,type:str]
+hidden-quartz:
+    name: ENC[AES256_GCM,data:qx5IhREwx4aIZTYgbg==,iv:ndeI9pghtc7OyQmE8DEQGioqmH+5O6rP5bfcFupbhOE=,tag:r3fo55PGZOqu2Zrg6DvZVg==,type:str]
+    domains:
+        - ENC[AES256_GCM,data:yA2PssYXYogVauTiy9h502Y=,iv:N/MQBY8AFeCuKJ/scSGIdvAZOPhzK59+Csac98IL/eQ=,tag:qTGoS/KwS2C602iq9C4eGA==,type:str]
+sops:
+    gcp_kms:
+        - created_at: "2026-11-27T18:11:14Z"
+          enc: CiQASNTjEjDScjzcvhi183MXbJgTGjgCSrcRRtaVIey/yR7UApwSSQAQ32DrshFNm3NLzZ8IRErRAbv5rpOyB5FY1WJblfI8dsUb/u4tMdv7Z7XnaYVI/6MCz8nMxdBBEYuDm+lVqEuPs+oJxi0qxhY=
+          resource_id: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
+    lastmodified: "2026-11-27T18:11:14Z"
+    mac: ENC[AES256_GCM,data:sUHzxdeIZHlzeqa4k8iDBugLJ6SNeNE94HryfhEzhN4XZ2s4gy4GqJCiu1PX7hmy9o8apvfMzsWPqMDidhtaGIxX25p1spufF7TrZTn4YzvqiT1f6enRSBwuAxkdqa7OI2Cl9GutIfVJL9256fjw+/ERX0n284cs93fDqxShMwM=,iv:EENWxV6D+MjiG5A9FfsOjTCwRFKLqdwQP9ya3IxdlKk=,tag:DLIbQa1DboLkLNtUqgR+ww==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3
