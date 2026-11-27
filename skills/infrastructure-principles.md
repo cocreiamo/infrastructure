@@ -50,8 +50,10 @@ wants not to have to return to it for years.
    and the workflow come first.
 7. **No extra party.** A service or application run by a third party is not
    given access to the organization when the same result is reached inside
-   the platforms already used (GitHub and Google Cloud). Example: Renovate
-   run in our own Actions. Not: an orchestrator's cloud (ADR 0007).
+   the platforms already used (GitHub and Google Cloud). Not: an
+   orchestrator's cloud (ADR 0007). An application the organization already
+   uses on all its repositories (Renovate, CLA Assistant) is used here too,
+   so that the repositories work the same way (ADR 0001, 0010).
 8. **The founder decides.** A proposal carries one recommendation; nothing
    is written, committed or applied before the decision.
 9. **Facts have a date and a source.** A tool is judged on what its own
@@ -59,7 +61,7 @@ wants not to have to return to it for years.
    to come from memory, and what could not be verified becomes an issue.
 
 When two rules conflict, security (4) and little upkeep (3) come before
-convenience, and "adopt" (1) does not justify adopting a third party (7).
+convenience, and "adopt" (1) does not justify adopting a new third party (7).
 
 ## Questions to answer before proposing
 

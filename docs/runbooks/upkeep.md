@@ -12,6 +12,7 @@ built yet.
 | A provider's incompatible version | A pull request whose plan is not empty     | Leave it open until there is time to take it           |
 | Actions retired by their makers   | A pull request from Renovate, or a warning | Merge when the checks pass                             |
 | The payment method                | A budget or billing notice                 | Update it; the second contact receives the notice too  |
+| The scheduled drift check         | GitHub disables it after 60 days idle      | Enable the workflow again in the Actions tab           |
 | Reality drifting from the code    | An issue opened by the drift check         | Read the plan locally; change the code or the resource |
 
 ## Procedures still to write

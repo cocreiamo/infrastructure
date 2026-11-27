@@ -7,7 +7,7 @@ considered and why each lost. An ADR in the status "proposed" describes
 the intended system, not the present one: what is built and verified is
 told by the tests and by `tests/pending.toml`.
 
-- [0001](0001-licence.md) Apache-2.0, with licence information on every file (proposed)
+- [0001](0001-licence.md) Apache-2.0, the organization's contributor agreement, and licence information on every file (proposed)
 - [0002](0002-authorship-and-signed-commits.md) Authorship, AI assistance and signed commits (proposed)
 - [0003](0003-repository-and-toolchain.md) One repository with OpenTofu, Terragrunt and mise, every version exact (proposed)
 - [0004](0004-state-storage-and-encryption.md) State in a private bucket, encrypted before it leaves the machine (proposed)

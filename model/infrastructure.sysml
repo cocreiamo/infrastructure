@@ -287,9 +287,8 @@ package Infrastructure {
         }
         requirement <'R30'> updatesProposed {
             doc /* A new version of any pinned tool, provider, module or
-                 * action shall be proposed as a pull request, without the
-                 * organization granting access to a service run by a third
-                 * party. */
+                 * action shall be proposed as a pull request, and shall never
+                 * be applied without the maintainer's approval. */
             subject tools : Toolchain;
         }
         requirement <'R31'> earlierStateRestorable {
