@@ -48,7 +48,11 @@ option in which unmerged code cannot change anything.
    `main`: it writes the state, decrypts the `apply` secrets
    ([ADR-0005](0005-secrets-in-the-repository.md)) and changes resources.
    The federation accepts a token only from this repository and only with
-   the matching Environment.
+   the matching Environment. The subject of a job that names an Environment
+   is `repo:<owner>/<repository>:environment:<name>` whatever started it, so
+   the `plan` identity serves pull requests and the scheduled drift check
+   alike; `apply` is further restricted to `main` by the Environment's
+   branch rule and by the `ref` claim of the token.
 3. **The `apply` Environment requires the maintainer's approval.** With one
    person this is not a second pair of eyes; it is a deliberate pause: read
    the plan, then approve.

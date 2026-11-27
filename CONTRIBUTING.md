@@ -9,8 +9,9 @@ Corrections and suggestions are welcome as issues or pull requests.
 - Read the [Code of Conduct](CODE_OF_CONDUCT.md).
 - Report security problems privately, as described in
   [SECURITY.md](SECURITY.md), not in an issue or a pull request.
-- A contribution is licensed under the Apache License 2.0, as the licence
-  itself states; no separate agreement is asked
+- Contributions are accepted under the organization's
+  [Contributor License Agreement](https://github.com/cocreiamo/anima/blob/main/CLA.md).
+  CLA Assistant asks you to sign it on your first pull request
   ([ADR 0001](docs/adr/0001-licence.md)).
 
 ## What a pull request from a fork gets

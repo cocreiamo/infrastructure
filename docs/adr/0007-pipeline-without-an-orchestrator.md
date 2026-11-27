@@ -42,7 +42,10 @@ leaves to us is small.
 1. The pipeline is **GitHub Actions workflows that run Terragrunt**, on
    GitHub-hosted runners, which are free of charge for a public repository.
 2. **Terragrunt is the orchestrator**: it works out the units a change
-   affects, their dependencies and their order.
+   affects, their dependencies and their order. On a pull request it runs
+   with `--filter-affected`, which compares the branch with `main` and needs
+   the whole history checked out; a unit that was removed is destroyed only
+   when `--filter-allow-destroy` is also given.
 3. Tools are installed by mise; Terragrunt is run by the official
    `gruntwork-io/terragrunt-action`, which reads the versions from
    `mise.toml`. Its pull request comment stays off (GAP-002).
@@ -55,7 +58,7 @@ leaves to us is small.
    merge has two jobs: `plan` makes the plan of each affected unit and
    uploads the encrypted files as an artifact; `apply` needs `plan`, waits
    for the approval of the `apply` Environment, downloads the artifact of
-   the same run and applies those files.
+   the same run and applies those files. The artifact is kept for 7 days.
 6. **When `main` moves in the meantime**, nothing special is built: OpenTofu
    itself refuses a saved plan that is no longer current, and the run is
    started again. The workflow has a `concurrency` group that never cancels
