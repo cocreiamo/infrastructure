@@ -1,0 +1,2 @@
+# Commits that only reformat code, one full commit hash per line.
+# `git blame` and GitHub skip them.

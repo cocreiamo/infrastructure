@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#MISE description="Export a SysML v2 file to JSON and print the path of the JSON file"
+#
+# Export a SysML v2 file to JSON with the OMG SysML v2 Pilot Implementation
+# and print the path of the JSON file.
+#
+# Usage: mise run model:export [file.sysml]   (default: model/infrastructure.sysml)
+set -euo pipefail
+
+: "${SYSML_PILOT_VERSION:?set in mise.toml}"
+
+root="${MISE_PROJECT_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+input="$(realpath "${1:-$root/model/infrastructure.sysml}")"
+dir="$root/.cache/sysml-pilot/$SYSML_PILOT_VERSION"
+jar="$dir/sysml/jupyter-sysml-kernel-$SYSML_PILOT_VERSION-all.jar"
+lib="$dir/sysml/sysml.library"
+# model:check downloads the pilot on its first run.
+[ -f "$jar" ] || "$root/mise-tasks/model/check" "$input" >/dev/null
+
+# GAP-003: the exporter looks some library files up by URL-encoded path, and
+# the directories of the pilot's own library have spaces in their names. Give
+# each such directory an alias with the encoded name.
+find "$lib" -type d -name '* *' | while read -r directory; do
+    name="$(basename "$directory")"
+    ln -sfn "$name" "$(dirname "$directory")/${name// /%20}"
+done
+
+# GAP-004: the exporter names its output by cutting the input path at the
+# first dot, so it is given a bare file name and run from the directory that
+# holds it.
+# Each call has its own directory, so that exports run in parallel (the tests
+# and generate:check do) never overwrite one another. The caller removes it.
+mkdir -p "$root/.cache/sysml-export"
+out="$(mktemp -d "$root/.cache/sysml-export/run.XXXXXX")"
+cp "$input" "$out/model.sysml"
+cd "$out"
+if ! timeout 300 java -cp "$jar" org.omg.sysml.xtext.util.SysML2JSON \
+        -l "$lib" model.sysml \
+        "Kernel Libraries" "Systems Library" "Domain Libraries" \
+        > "$out/output.txt" 2>&1 || [ ! -f "$out/model.json" ]; then
+    grep -v '^log4j' "$out/output.txt" >&2
+    echo "model:export: the pilot implementation did not produce the JSON" >&2
+    exit 1
+fi
+echo "$out/model.json"

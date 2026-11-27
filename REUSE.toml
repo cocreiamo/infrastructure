@@ -1,0 +1,35 @@
+version = 1
+
+# Everything Cocreiamo writes in this repository.
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Cocreiamo di Bilotta Francesco"
+SPDX-License-Identifier = "Apache-2.0"
+
+# Issue form adapted from the Keycloak project.
+[[annotations]]
+path = ".github/ISSUE_TEMPLATE/enhancement.yml"
+precedence = "override"
+SPDX-FileCopyrightText = [
+  "Keycloak Authors",
+  "2026 Cocreiamo di Bilotta Francesco",
+]
+SPDX-License-Identifier = "Apache-2.0"
+
+# Pull request template adapted from the Kubernetes project.
+[[annotations]]
+path = ".github/PULL_REQUEST_TEMPLATE.md"
+precedence = "override"
+SPDX-FileCopyrightText = [
+  "The Kubernetes Authors",
+  "2026 Cocreiamo di Bilotta Francesco",
+]
+SPDX-License-Identifier = "Apache-2.0"
+
+# Contributor Covenant 3.0, adapted only in its contact address.
+[[annotations]]
+path = "CODE_OF_CONDUCT.md"
+precedence = "override"
+SPDX-FileCopyrightText = "Organization for Ethical Source"
+SPDX-License-Identifier = "CC-BY-SA-4.0"

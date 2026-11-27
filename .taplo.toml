@@ -1,0 +1,3 @@
+# Only the repository's own TOML files: never generated files or caches.
+include = ["*.toml", ".taplo.toml", "tests/*.toml"]
+exclude = ["mise.lock"]

@@ -1,0 +1,139 @@
+# Single entry point for the maintainer and CI: `mise run <task>`.
+# Every version here is exact (ADR 0003): no ranges, no "latest".
+
+[settings]
+# mise.lock records the download URL and checksum of every tool below.
+lockfile = true
+
+[tools]
+# ---- Infrastructure as code (ADR 0003) ---------------------------------
+opentofu = "1.13.10"
+terragrunt = "1.2.3"
+sops = "3.13.3"
+"aqua:cloudflare/cf-terraforming" = "0.31.0"
+tflint = "0.66.0"
+trivy = "0.76.2"
+# The maintainer's sign-in to Google Cloud and GitHub (ADR 0005, 0008).
+gcloud = "594.0.1"
+gh = "2.106.0"
+
+# ---- Repository checks, as in the anima repository ---------------------
+# Decision records in MADR; not in mise's registry, hence the github backend.
+"github:joshrotenberg/adrs" = "0.13.0"
+jq = "1.8.2"
+java = "temurin-21.0.13+9.0.LTS"
+python = "3.13.18"
+node = "24.22.3"
+uv = "0.13.10"
+"pipx:reuse" = "6.3.0"
+"npm:prettier" = "3.10.1"
+gitleaks = "8.30.1"
+zizmor = "1.33.1"
+ruff = "0.17.6"
+shellcheck = "0.11.0"
+actionlint = "1.7.12"
+taplo = "0.10.0"
+typos = "1.52.2"
+committed = "1.1.12"
+
+[env]
+# uv must use the Python pinned above, never one it downloads itself.
+UV_PYTHON_PREFERENCE = "only-system"
+UV_PROJECT_ENVIRONMENT = "{{config_root}}/.cache/venv"
+# Everything generated or cached lives in .cache/, the one ignored directory.
+PYTHONPYCACHEPREFIX = "{{config_root}}/.cache/pycache"
+RUFF_CACHE_DIR = "{{config_root}}/.cache/ruff"
+# OMG SysML v2 Pilot Implementation, the validator of model/*.sysml.
+SYSML_PILOT_RELEASE = "2026-09.1"
+SYSML_PILOT_VERSION = "0.63.1"
+SYSML_PILOT_SHA256 = "2ab938037b8d3a02a3518019b6e81b356a994f4a5214727bfedcfd64bad25415"
+
+# model:check and model:export are file tasks in mise-tasks/model/;
+# generate and generate:check are file tasks in mise-tasks/generate/.
+
+[tasks."code:check"]
+description = "Check the OpenTofu and Terragrunt code: formatting, lint, misconfiguration scan"
+run = [
+  "tofu fmt -check -recursive",
+  "terragrunt hcl fmt --check",
+  "tflint --recursive",
+  "trivy config --quiet --exit-code 1 --skip-dirs .cache .",
+]
+
+[tasks."adr:check"]
+description = "Check the decision records: required sections, statuses, dates, numbering, broken links"
+run = "adrs doctor --warnings-as-errors"
+
+[tasks."workflows:check"]
+description = "Analyse the GitHub Actions workflows (syntax, permissions, injection, unpinned actions)"
+run = ["actionlint", "zizmor --offline .github/workflows"]
+
+[tasks.test]
+description = "Run the automated verifications"
+run = "uv run --locked pytest"
+
+[tasks."licenses:check"]
+description = "Check that every file carries copyright and licence information (REUSE)"
+run = "reuse lint"
+
+[tasks."secrets:check"]
+description = "Scan the repository for committed secrets"
+run = "gitleaks git --no-banner --redact"
+
+[tasks.lint]
+description = "Lint and check the formatting of the repository's files"
+run = [
+  "ruff check .",
+  "ruff format --check .",
+  "shellcheck mise-tasks/model/check mise-tasks/model/export",
+  "prettier --check .",
+  "taplo fmt --check",
+  "typos",
+]
+
+[tasks.format]
+description = "Write the generated files, then format the repository's files"
+depends = ["generate"]
+run = [
+  "ruff format .",
+  "tofu fmt -recursive",
+  "terragrunt hcl fmt",
+  "prettier --write .",
+  "taplo fmt",
+]
+
+[tasks.check]
+description = "Run every check"
+depends = [
+  "adr:check",
+  "model:check",
+  "generate:check",
+  "licenses:check",
+  "secrets:check",
+  "lint",
+  "code:check",
+  "workflows:check",
+  "test",
+]
+
+# ---- Git hooks, installed by `mise run hooks:install` -----------------------
+
+[tasks."pre-commit"]
+description = "Git pre-commit hook: the fast checks"
+depends = ["lint", "licenses:check", "workflows:check", "code:check"]
+
+[tasks."commit-msg"]
+description = "Git commit-msg hook: the message follows Conventional Commits"
+run = "committed --commit-file"
+
+[tasks."pre-push"]
+description = "Git pre-push hook: every check"
+depends = ["check"]
+
+[tasks."hooks:install"]
+description = "Install the git hooks that run the three tasks above"
+run = [
+  "mise generate git-pre-commit --write --hook pre-commit --task pre-commit",
+  "mise generate git-pre-commit --write --hook commit-msg --task commit-msg",
+  "mise generate git-pre-commit --write --hook pre-push --task pre-push",
+]

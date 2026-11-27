@@ -1,0 +1,39 @@
+# Adapted from the Keycloak project's enhancement request form (Apache-2.0).
+name: Enhancement Request
+description: Suggest a change to the infrastructure code, the pipeline or the documents. Never include a secret or a value of a resource.
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the enhancement at a high-level
+    validations:
+      required: true
+  - type: textarea
+    id: value_proposition
+    attributes:
+      label: Value Proposition
+      description: Describe what value the enhancement brings
+    validations:
+      required: true
+  - type: textarea
+    id: goals
+    attributes:
+      label: Goals
+      description: Describe what the enhancement should provide
+    validations:
+      required: true
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-Goals
+      description: Describe what the enhancement should not provide, or is out of scope
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Design ideas? Implementation ideas? Anything that will give us more context about the enhancement you are proposing!
+    validations:
+      required: false

@@ -1,0 +1,21 @@
+[project]
+name = "infrastructure-verification"
+version = "0.0.1"
+description = "Automated verifications of the infrastructure requirements model"
+requires-python = "==3.13.*"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+extend-exclude = [".cache"]
+# The generate tasks are Python scripts without an extension.
+include = ["*.py", "*.pyi", "**/pyproject.toml", "mise-tasks/generate/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+cache_dir = ".cache/pytest"

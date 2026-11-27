@@ -1,0 +1,10 @@
+# Texts adopted as they are.
+LICENSE
+LICENSES/
+CODE_OF_CONDUCT.md
+
+# Generated.
+.mise/
+mise.lock
+uv.lock
+.cache/

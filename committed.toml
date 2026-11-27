@@ -1,0 +1,5 @@
+# Commit messages follow Conventional Commits, like pull request titles.
+style = "conventional"
+# "feat: add …", as in the existing history: lower case after the type.
+subject_capitalized = false
+subject_length = 72

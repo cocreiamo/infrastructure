@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+# MISE description="Write every generated file (ADR index)"
+#
+# Usage: mise run generate
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import generators
+
+for name, text in generators.outputs().items():
+    path = generators.ROOT / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists() or path.read_text() != text:
+        path.write_text(text)
+        print(f"generate: wrote {name}")

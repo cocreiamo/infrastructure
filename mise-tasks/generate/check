@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+# MISE description="Fail if a generated file is out of date; writes nothing"
+#
+# Usage: mise run generate:check
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import generators
+
+stale = [
+    name
+    for name, text in generators.outputs().items()
+    if not (generators.ROOT / name).exists()
+    or (generators.ROOT / name).read_text() != text
+]
+if stale:
+    print(f"generate:check: out of date: {', '.join(stale)}", file=sys.stderr)
+    print("generate:check: run `mise run generate`", file=sys.stderr)
+    sys.exit(1)
+print("generate:check: every generated file is current")

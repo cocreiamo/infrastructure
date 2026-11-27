@@ -1,0 +1,15 @@
+{
+    "name": "infrastructure",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04@sha256:d94c97dd9cacf183d0a6fd12a8e87b526e9e928307674ae9c94139139c0c6eae",
+    "features": {
+        "ghcr.io/devcontainers-extra/features/mise@sha256:5c389ab1e3c8e44e5e0ff119f6868d54dbb781bc860bd8587dc66209cb8c4a8c": {
+            "version": "2026.11.10"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": ["hverlin.mise-vscode"]
+        }
+    },
+    "postCreateCommand": "mise trust && mise install && mise run hooks:install"
+}

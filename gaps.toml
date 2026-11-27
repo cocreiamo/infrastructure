@@ -1,0 +1,60 @@
+# Register of known gaps and defects of adopted components and platforms.
+#
+# Where the repository holds a workaround, the workaround names its entry in a
+# comment (for example `# GAP-001`). A resolved entry is not deleted: its
+# status becomes "closed" and its id stays taken.
+#
+# Fields
+#   id             GAP-001, GAP-002, ... never reused
+#   component      the adopted component or platform
+#   version        the version the gap was observed in
+#   summary        what is missing or broken
+#   impact         what it means for this repository
+#   workaround     a repository path, a short description, or "none"
+#   upstream       URL of the upstream issue, or "not reported"
+#   resolved_when  the condition under which the entry is closed
+#   status         "open" or "closed"
+
+[[gap]]
+id = "GAP-001"
+component = "SysML v2 Pilot Implementation"
+version = "0.63.1"
+summary = "There is no command-line validator. Its interactive shell reads a model on standard input and always exits 0, even when the model has errors."
+impact = "A model error would not fail a check by itself."
+workaround = "mise-tasks/model/check"
+upstream = "not reported"
+resolved_when = "The pilot implementation offers a validator whose exit status reports errors and warnings."
+status = "open"
+
+[[gap]]
+id = "GAP-002"
+component = "gruntwork-io/terragrunt-action"
+version = "v3, README read on 2026-11-27"
+summary = "Its pull request comment (input tg_comment) posts the whole output of the command; there is no summary-only mode."
+impact = "The comment cannot be used in a public repository that keeps plan values private (ADR 0008)."
+workaround = "Keep tg_comment off and post a summary of addresses and actions from a workflow step. Not built yet."
+upstream = "not reported"
+resolved_when = "The action can post a comment limited to resource addresses and actions."
+status = "open"
+
+[[gap]]
+id = "GAP-003"
+component = "SysML v2 Pilot Implementation"
+version = "0.63.1"
+summary = "The SysML2JSON exporter looks library files up by URL-encoded path and fails on the spaces in the directory names of its own library."
+impact = "The JSON export of the model, which the traceability test reads, fails without a workaround."
+workaround = "mise-tasks/model/export"
+upstream = "not reported"
+resolved_when = "SysML2JSON resolves its own library without aliases."
+status = "open"
+
+[[gap]]
+id = "GAP-004"
+component = "SysML v2 Pilot Implementation"
+version = "0.63.1"
+summary = "SysML2JSON names its output by cutting the input path at the first dot, so a path that contains a dotted directory writes the JSON somewhere else."
+impact = "The exported file is not where the caller expects it."
+workaround = "mise-tasks/model/export"
+upstream = "not reported"
+resolved_when = "SysML2JSON writes the JSON next to the input whatever the path."
+status = "open"
