@@ -11,7 +11,7 @@ told by the tests and by `tests/pending.toml`.
 - [0002](0002-authorship-and-signed-commits.md) Authorship, AI assistance and signed commits (proposed)
 - [0003](0003-repository-and-toolchain.md) One repository with OpenTofu, Terragrunt and mise, every version exact (proposed)
 - [0004](0004-state-storage-and-encryption.md) State in a private bucket, encrypted before it leaves the machine (proposed)
-- [0005](0005-secrets-in-the-repository.md) Secrets as encrypted files in the repository, two keys, none in GitHub (proposed)
+- [0005](0005-secrets-in-the-repository.md) Secrets as encrypted files in the repository, a key for each kind of reader, none in GitHub (proposed)
 - [0006](0006-pipeline-identity-and-access.md) The pipeline's identity is federated, reads on pull requests and writes only from main (proposed)
 - [0007](0007-pipeline-without-an-orchestrator.md) The pipeline is GitHub Actions and Terragrunt, with no orchestrator (proposed)
 - [0008](0008-plan-visibility.md) Plans are summarised in public and their detail is encrypted (proposed)

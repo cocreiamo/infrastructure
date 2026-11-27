@@ -7,6 +7,10 @@ creation_rules:
   # Credentials that only read.
   - path_regex: ^secrets/plan\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
-  # Credentials that can change resources: only the identity that applies from main.
-  - path_regex: ^secrets/apply\.enc\.yaml$
+  # Credentials that can change resources, one file each: only the identity that applies from main decrypts
+  # them, no person does. A person replaces a file without being able to read it.
+  - path_regex: ^secrets/apply/[A-Z0-9_]+\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-apply
+  # Recovery codes of the accounts: only the founder decrypts them, never the pipeline.
+  - path_regex: ^secrets/recovery\.enc\.yaml$
+    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/recovery

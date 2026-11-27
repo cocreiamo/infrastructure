@@ -55,8 +55,18 @@ github:
     why: the provider has no resource for it
   - what: the GitHub Apps of the organization, their permissions and their private keys
     why: an App and its key can only be created in the browser; which repositories an installation sees is described by the code
-  - what: the third-party applications installed on the organization
-    why: installing one is an act of the owner in the browser
+  - what: the App cocreiamo-infrastructure, which administers the organization and its repositories
+    why: it is the identity that applies changes to GitHub; its key is in secrets/apply/
+  - what: the App cocreiamo-infrastructure-plan, which only reads
+    why: it is the identity that plans and checks drift; its key is in secrets/plan.enc.yaml
+  - what: the App cocreiamo-bot, which writes contents, pull requests and workflows
+    why: the pull requests of the agents; its key is in secrets/apply/
+  - what: the App cocreiamo-runners, which registers self-hosted runners on selected repositories
+    why: kept although no runner of ours exists today, because it may serve again
+  - what: the Hostinger application, installed on selected repositories
+    why: it deploys the sites of two tenants; it goes when they leave Hostinger
+  - what: the Renovate application of its vendor
+    why: it proposes updates (ADR-0010); installing an application is an act of the owner in the browser
   - what: the archived repositories
     why: nothing changes on them, and GitHub refuses to read their settings
 

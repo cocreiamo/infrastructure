@@ -1,13 +1,13 @@
 ---
 number: 5
-title: Secrets as encrypted files in the repository, two keys, none in GitHub
+title: Secrets as encrypted files in the repository, a key for each kind of reader, none in GitHub
 status: proposed
 date: 2026-11-27
 decision-makers:
   - founder
 ---
 
-# Secrets as encrypted files in the repository, two keys, none in GitHub
+# Secrets as encrypted files in the repository, a key for each kind of reader, none in GitHub
 
 ## Context and Problem Statement
 
@@ -23,11 +23,11 @@ and who can read which?
 - The founder does not want to pay for a secret manager.
 - A pull request must never reach a credential that can change something.
 - Nothing to keep by hand for years: no key file, no offline copy.
+- No person should be able to read a credential that can change something.
 
 ## Considered Options
 
-- SOPS files encrypted with a key service, two keys by what the credential
-  can do
+- SOPS files encrypted with a key service, a key for each kind of reader
 - A secret manager
 - GitHub Environment secrets alone
 - SOPS with an age key kept only in a GitHub Environment secret
@@ -35,30 +35,47 @@ and who can read which?
 
 ## Decision Outcome
 
-Chosen option: "SOPS files encrypted with a key service, two keys by what the
-credential can do", because it versions the secrets, separates reading from
-changing, and leaves no key to guard.
+Chosen option: "SOPS files encrypted with a key service, a key for each kind
+of reader", because it versions the secrets, separates reading from changing,
+and leaves no key to guard.
 
 1. Secrets are **SOPS files in this repository**, encrypted with keys in
    **Google Cloud KMS**. Terragrunt reads them with `sops_decrypt_file()`.
-2. **Two files, two keys**: the `plan` file holds credentials that only
-   read, and can be decrypted by the identity of pull requests and by the
-   maintainer; the `apply` file holds credentials that can change, and can
-   be decrypted only by the identity that applies from `main`
-   ([ADR-0006](0006-pipeline-identity-and-access.md)) and by the maintainer.
-   `.sops.yaml` chooses the key by path.
-3. **GitHub stores no secret.** It holds only variables that are not secret.
-4. The maintainer edits a secret with their own sign-in to Google Cloud. No
+2. **Who can decrypt decides the key**, and the permission to encrypt is
+   separate from the permission to decrypt:
+
+   | Key             | Holds                                                              | Decrypts                                     | Encrypts     |
+   | --------------- | ------------------------------------------------------------------ | -------------------------------------------- | ------------ |
+   | `state`         | state and plans ([ADR-0004](0004-state-storage-and-encryption.md)) | the pipeline, and the founder to read a plan | the pipeline |
+   | `secrets-plan`  | credentials that only read, the map of tenants                     | the `plan` identity, and the founder         | the founder  |
+   | `secrets-apply` | credentials that can change                                        | only the `apply` identity, **no person**     | the founder  |
+   | `recovery`      | recovery codes of the accounts                                     | only the founder, never the pipeline         | the founder  |
+
+   `.sops.yaml` chooses the key by path. A pull request, even a malicious
+   one from a branch of this repository, never reaches a credential that can
+   change something ([ADR-0006](0006-pipeline-identity-and-access.md)).
+
+3. **A credential that can change is one file**, `secrets/apply/<NAME>.enc.yaml`:
+   a person replaces the file with a new value without being able to read
+   the old one or the new one afterwards. Editing a file would need the
+   permission to decrypt; replacing it does not.
+4. **Recovery codes are the exception by nature**: they exist for a person
+   in an emergency, so the founder can read them. The codes of the Google
+   account are never kept behind a Google key: they are offline.
+5. **GitHub stores no secret.** It holds only variables that are not secret.
+6. The maintainer writes a secret with their own sign-in to Google Cloud. No
    key file exists on any machine.
-5. **Static credentials are kept to three**: the Cloudflare token and the
-   private keys of **two GitHub Apps**, one that can only read (in the
+7. **Static credentials are kept few**: the Cloudflare tokens (with the one
+   that creates the others, so that the pipeline rotates them by itself), the
+   credentials of the other platforms, and the private keys of **two GitHub
+   Apps**, one that can only read (in the
    `plan` file) and one that can change (in the `apply` file). One App would
    not do: its key grants everything the App may do, whoever holds it. No
    personal access token is used, because it expires and belongs to a
    person.
-6. A secret that is replaced is also **revoked at its source**: the old
+8. A secret that is replaced is also **revoked at its source**: the old
    ciphertext stays in the public history.
-7. Changes to the secret files and to `.sops.yaml` have the maintainer as
+9. Changes to the secret files and to `.sops.yaml` have the maintainer as
    code owner and are never taken from a fork.
 
 ### Consequences
@@ -67,6 +84,13 @@ changing, and leaves no key to guard.
   repository, never reaches a credential that can change something.
 - Good, because a person's access is removed with one change of IAM, and
   every use of a key is logged.
+- Good, because nobody can read a credential that changes resources: a leak
+  would need the pipeline itself.
+- Bad, because the owner of the organization can always grant themselves
+  the permission to decrypt. It cannot be prevented, only logged and alerted
+  on: the guarantee is that no person decrypts without leaving a trace.
+- Bad, because until the bootstrap sets these permissions the founder's
+  sign-in can decrypt everything.
 - Bad, because SOPS encrypts values, not key names: the names of the
   secrets are public.
 - Bad, because anyone with write access to the repository can obtain the
@@ -77,13 +101,15 @@ changing, and leaves no key to guard.
 
 ### Confirmation
 
-Requirements R13, R14, R16 and R33 state what must hold; their tests are not
-written. `mise run secrets:check` searches the history for secrets in clear.
+Requirements R13, R14, R16 and R33 state what must hold. R13 has its test;
+the permissions on the keys are not set yet and come with the bootstrap
+([ADR-0009](0009-bootstrap.md)), where it is also to verify that Google lets
+the decryption be denied to the owner. `mise run secrets:check` searches the history for secrets in clear.
 Nothing is built yet.
 
 ## Pros and Cons of the Options
 
-### SOPS files encrypted with a key service, two keys by what the credential can do
+### SOPS files encrypted with a key service, a key for each kind of reader
 
 - Good, because the key never leaves the service.
 - Bad, because it costs a few cents a month and depends on Google Cloud.
