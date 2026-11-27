@@ -70,6 +70,9 @@ run = ["actionlint", "zizmor --offline .github/workflows"]
 
 [tasks.test]
 description = "Run the automated verifications"
+# The tests export the model, and generate:check does too: one after the other,
+# and both after model:check has downloaded the pilot implementation.
+depends = ["generate:check"]
 run = "uv run --locked pytest"
 
 [tasks."licenses:check"]

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # MISE description="Write every generated file (ADR index)"
+# MISE depends=["model:check"]
+#
+# model:check runs first: it downloads the pilot implementation, which the
+# export of the model needs and must not download at the same time.
 #
 # Usage: mise run generate
 import sys
