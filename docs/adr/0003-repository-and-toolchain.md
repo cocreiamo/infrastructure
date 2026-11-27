@@ -11,8 +11,10 @@ decision-makers:
 
 ## Context and Problem Statement
 
-The infrastructure spans three providers (Google Cloud, GitHub, Cloudflare)
-and is maintained by one person. With which tools is it described, and how is
+The infrastructure spans seven providers (Google Cloud, Google Workspace,
+GitHub, Cloudflare, Amazon Web Services, Mailtrap, Healthchecks.io), with a
+Hetzner credential kept ready for machines that do not exist today, and is
+maintained by one person. With which tools is it described, and how is
 the repository organised so that it still works, unchanged, years from now?
 
 ## Decision Drivers
@@ -49,10 +51,25 @@ every driver.
 5. **Every version is exact**: tools in `mise.toml` with checksums in
    `mise.lock`, providers in each unit's lock file, modules by version,
    actions by commit.
-6. **Layout by provider, not by environment**, because there is one
-   environment: `bootstrap/`, `gcp/`, `github/`, `cloudflare/`, and
-   `modules/` only where no published module fits. It follows Gruntwork's
-   reference structure for Terragrunt.
+6. **Layout by capability, not by provider and not by environment.** The
+   directories say what the company does, not whom it buys from, and there
+   is one environment. A unit may use more than one provider.
+
+   | Directory             | What it holds                                                       |
+   | --------------------- | ------------------------------------------------------------------- |
+   | `bootstrap/`          | What the pipeline stands on ([ADR-0009](0009-bootstrap.md))         |
+   | `organization/`       | Who administers what: roles, policies, users, groups, billing       |
+   | `source-control/`     | Repositories, their rules and settings                              |
+   | `dns/`                | Zones and records                                                   |
+   | `email/`              | Sending, receiving, and the policies that protect mail              |
+   | `edge/`               | Firewall rules, redirects, bot protection, access to tools          |
+   | `monitoring/`         | The heartbeat of the drift check                                    |
+   | `tenants/<codename>/` | The resources of each tenant ([ADR-0011](0011-tenant-codenames.md)) |
+   | `modules/`            | Modules of our own, only where no published module fits             |
+
+   Terragrunt follows Gruntwork's reference structure of live units plus
+   modules.
+
 7. **Requirements live in a SysML v2 model**, `model/infrastructure.sysml`,
    and decisions in MADR records checked by the `adrs` tool, as in `anima`.
 
@@ -66,6 +83,8 @@ The conventions that follow from this decision are in the skill
 - Good, because a tool is updated by a pull request that changes one line
   and the lock.
 - Bad, because Terragrunt is one more layer to keep current.
+- Bad, because a unit that uses several providers needs several credentials
+  to plan.
 - Bad, because `adrs` is version 0.x with one maintainer; it is pinned.
 
 ### Confirmation

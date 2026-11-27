@@ -17,3 +17,4 @@ told by the tests and by `tests/pending.toml`.
 - [0008](0008-plan-visibility.md) Plans are summarised in public and their detail is encrypted (proposed)
 - [0009](0009-bootstrap.md) The bootstrap is one unit, applied by hand and never by the pipeline (proposed)
 - [0010](0010-updates-and-drift.md) Drift is reported and updates are proposed as pull requests (proposed)
+- [0011](0011-tenant-codenames.md) Tenants are named by codename in the code and their real names are encrypted (proposed)
