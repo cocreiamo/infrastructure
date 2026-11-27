@@ -40,14 +40,17 @@ Chosen option: "A private Google Cloud Storage bucket, with client-side
 encryption by a key service", because it is the common design, locks
 natively, and leaves no key to guard.
 
-1. The state lives in **one private bucket** in the European Union, with
+1. The state lives in **one private bucket** in the project
+   `cocreiamo-infrastructure`, in the European Union, with
    object versioning, uniform bucket-level access and public access
    prevented by policy.
 2. **OpenTofu encrypts state and plan files itself**, before they leave the
    machine that produces them, with a key in **Google Cloud KMS**. The
    bucket's own encryption at rest is a second layer.
-3. The key rotates automatically. Nobody holds a copy of it: access is
-   granted and removed with IAM, and every use is logged.
+3. The key rotates automatically once a year. Old versions are never
+   destroyed: each costs a few cents a month, and destroying one would make
+   unreadable whatever was last written with it. Nobody holds a copy of a
+   key: access is granted and removed with IAM, and every use is logged.
 4. The bucket and the keys cannot be removed by a change: `prevent_destroy`
    on both, and a lien on the project that holds them
    ([ADR-0009](0009-bootstrap.md)).
@@ -68,7 +71,9 @@ natively, and leaves no key to guard.
 ### Confirmation
 
 Requirements R10, R11, R12, R28 and R31 state what must hold; their tests are
-not written and are listed in `tests/pending.toml`. Nothing is built yet.
+not written and are listed in `tests/pending.toml`. The project and the key
+ring exist, created by hand ([ADR-0009](0009-bootstrap.md)); the bucket does
+not.
 
 ## Pros and Cons of the Options
 
@@ -81,7 +86,10 @@ not written and are listed in `tests/pending.toml`. Nothing is built yet.
 
 ### Cloudflare R2 through the S3 backend
 
+The design of the previous repository, with a passphrase.
+
 - Good, because it would not depend on Google Cloud.
+- Bad, because its keys are a secret needed before any secret can be read.
 - Bad, because it needs a static token.
 - Bad, because its locking was not verified.
 
@@ -108,6 +116,14 @@ Actions cache).
 - Good, because it removes the key service.
 - Bad, because a passphrase lost is a state lost, so an offline copy must be
   kept by someone for years.
+
+### Destroying key versions older than two years
+
+- Good, because the cost of the keys stays fixed.
+- Bad, because a workflow of ours would have to re-encrypt every state and
+  every secret file each year, with write access to all of them.
+- Bad, because if it failed unnoticed, the destruction of a version would
+  lose a state for a saving of about two dollars a month after ten years.
 
 ### A self-hosted state service
 

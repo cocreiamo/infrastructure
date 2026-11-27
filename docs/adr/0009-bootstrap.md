@@ -15,8 +15,9 @@ The pipeline needs a bucket, keys, a federation and service accounts before
 it can run, and those are themselves infrastructure. Something must exist
 first. How does what the pipeline stands on come to exist, and who changes it?
 
-A bucket and a federated identity happen to exist already. That is an
-accident of history, not a design.
+A previous repository had a state bucket on Cloudflare R2 and a federated
+identity in a project named by a generator. That is an accident of history,
+not a design: neither is kept.
 
 ## Decision Drivers
 
@@ -40,7 +41,8 @@ and the only option that both describes everything and keeps the pipeline
 from changing its own permissions.
 
 1. A unit **`bootstrap/`** describes everything the pipeline needs:
-   - the project that holds state and keys, with a lien against deletion;
+   - the project `cocreiamo-infrastructure`, which holds state and keys,
+     with a lien against deletion;
    - the state bucket and the keys
      ([ADR-0004](0004-state-storage-and-encryption.md),
      [ADR-0005](0005-secrets-in-the-repository.md));
@@ -61,10 +63,16 @@ from changing its own permissions.
 4. It is built from published modules where they fit
    (`terraform-google-modules` for the project and for the federation with
    GitHub), pinned by version.
-5. **The repository itself was created by hand**, once, with `gh`, on
-   2026-11-27. It is imported by the `github/` code like any existing
-   resource.
-6. **Billing is a first-class risk.** Over years, the most likely way to
+5. **Three things were created by hand, once, on 2026-11-27**, and are
+   imported like any existing resource: the repository, with `gh`; the
+   project `cocreiamo-infrastructure`; and its key ring `infrastructure` in
+   `europe` with the keys `state`, `secrets-plan` and `secrets-apply`, with
+   `gcloud`. The keys came first because the secrets of the previous
+   repository had to be re-encrypted before anything else.
+6. **The federation and the service accounts are created new** in that
+   project: they cannot be moved from the old one, which is closed once
+   nothing depends on it.
+7. **Billing is a first-class risk.** Over years, the most likely way to
    lose everything is a payment card that expires and a project that is
    suspended and then removed with state and keys. Hence the budget alert
    and the second contact.

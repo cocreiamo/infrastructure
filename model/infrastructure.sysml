@@ -229,6 +229,14 @@ package Infrastructure {
                  * commit, and shall pass no untrusted input to a shell. */
             subject pipe : Pipeline;
         }
+        requirement <'R34'> noClientNameInClear {
+            doc /* A client shall be named in the repository only by a
+                 * generated codename. Its real name, its domain and the
+                 * identifiers of its resources shall appear only encrypted,
+                 * and no data about a person shall be kept in the repository
+                 * at all. */
+            subject repo : Repository;
+        }
     }
 
     // ---- Day 1: existing resources come under code -----------------------
@@ -308,6 +316,30 @@ package Infrastructure {
                  * shall say which credential is not valid, without showing
                  * it. */
             subject pipe : Pipeline;
+        }
+        requirement <'R35'> nothingByHandUndeclared {
+            doc /* Everything configured by hand on a managed platform shall
+                 * be declared in one register in the repository, with the
+                 * reason why it is not described as code. */
+            subject repo : Repository;
+        }
+        requirement <'R36'> deadlinesWatched {
+            doc /* Every deadline that no platform reminds of (a renewal, an
+                 * expiry) shall be declared in one register, and the
+                 * maintainer shall be told at least 30 days before each. */
+            subject pipe : Pipeline;
+        }
+        requirement <'R37'> credentialsRotate {
+            doc /* Every stored credential shall declare how often it is
+                 * replaced, or why it never is, and a credential older than
+                 * its declared interval shall be reported to the
+                 * maintainer. */
+            subject pipe : Pipeline;
+        }
+        requirement <'R38'> watchedDomainsMatchOwnedDomains {
+            doc /* The domains whose expiry is watched shall be exactly the
+                 * domains the repository declares as owned. */
+            subject repo : Repository;
         }
     }
 
@@ -449,6 +481,26 @@ package Infrastructure {
         verification def test_R33_expired_credential_fails_clearly {
             subject sys : System;
             objective { verify Day2::expiredCredentialFailsClearly; }
+        }
+        verification def test_R34_no_client_name_in_clear {
+            subject sys : System;
+            objective { verify Protection::noClientNameInClear; }
+        }
+        verification def test_R35_nothing_by_hand_undeclared {
+            subject sys : System;
+            objective { verify Day2::nothingByHandUndeclared; }
+        }
+        verification def test_R36_deadlines_watched {
+            subject sys : System;
+            objective { verify Day2::deadlinesWatched; }
+        }
+        verification def test_R37_credentials_rotate {
+            subject sys : System;
+            objective { verify Day2::credentialsRotate; }
+        }
+        verification def test_R38_watched_domains_match_owned_domains {
+            subject sys : System;
+            objective { verify Day2::watchedDomainsMatchOwnedDomains; }
         }
     }
 }

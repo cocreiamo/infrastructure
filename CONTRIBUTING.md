@@ -59,6 +59,6 @@ your changes.
   container.
 - `LICENSES/`: the licence texts REUSE needs.
 
-The directories of the code (`bootstrap/`, `gcp/`, `github/`, `cloudflare/`)
-are described in [ADR 0003](docs/adr/0003-repository-and-toolchain.md) and do
+The directories of the code, named by capability (`organization/`, `dns/`,
+`email/` and the others), are described in [ADR 0003](docs/adr/0003-repository-and-toolchain.md) and do
 not exist yet.

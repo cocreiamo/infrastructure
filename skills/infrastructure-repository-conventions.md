@@ -55,9 +55,11 @@ generate` writes them and `mise run generate:check` fails when one is
    `.claude/skills/<name>/SKILL.md`, `tests/pending.toml`. To add one, add
    its generator to `mise-tasks/generate/generators.py`.
 5. **One ignored directory, `.cache/`.**
-6. **Layout by provider, not by environment** (ADR 0003): `bootstrap/`,
-   `gcp/`, `github/`, `cloudflare/`, and `modules/` only where no published
-   module fits.
+6. **Layout by capability, not by provider** (ADR 0003): `bootstrap/`,
+   `organization/`, `source-control/`, `dns/`, `email/`, `edge/`,
+   `monitoring/`, `tenants/<codename>/`, and `modules/` only where no
+   published module fits. A directory is named for what it does, never for a
+   product. A client appears only as its codename (ADR 0011).
 7. **Every version is exact** (R1): tools, providers, modules, and actions
    by commit.
 8. **Formatting and linting tools, by what they cover.** `tofu fmt` and
