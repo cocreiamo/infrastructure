@@ -83,6 +83,8 @@ google_workspace:
     why: no interface
 
 google_cloud:
+  - what: the role that writes deny policies, granted to the founder on the organization
+    why: the bootstrap needs it before any code can run; granted on 2026-11-28, to be described with the organization
   - what: the billing account and its payment profile
     why: no interface; the roles on it are described by the code
   - what: the consent screen and the client of the Google sign-in used by Cloudflare Access

@@ -96,9 +96,8 @@ R9 is half met: the budget and the contacts are written, but the founder is
 alone and there is no second contact yet. R7 and R8 are verified by a plan
 after the apply and have no automated test yet. The steps
 are in [the runbook](../runbooks/bootstrap.md). The unit is written and
-applied since 2026-11-28, with its state in the state store; only the
-deny policy of [ADR-0005](0005-secrets-in-the-repository.md) is still to
-apply.
+applied since 2026-11-28, with its state in the state store, and a plan
+made after it reported no difference.
 
 ## Pros and Cons of the Options
 

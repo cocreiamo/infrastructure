@@ -97,8 +97,6 @@ and leaves no key to guard.
 - Bad, because the owner of the organization can always grant themselves
   the permission to decrypt. It cannot be prevented, only logged and alerted
   on: the guarantee is that no person decrypts without leaving a trace.
-- Bad, because until the deny policy is applied the founder's sign-in can
-  decrypt everything.
 - Bad, because the write credentials encrypted before the bootstrap stay in
   the public history under a key the founder can use, until each is replaced
   at its source.
@@ -116,11 +114,11 @@ Requirements R13, R14, R16 and R33 state what must hold. R13 and R16 have
 their tests. It was verified on 2026-11-28 in Google's documentation that a
 deny policy can refuse decryption, that it is attached to a project and
 narrowed only by tags, and that key rings carry tags while keys do not. The
-permissions are applied since 2026-11-28 and the write credentials are
-encrypted with the new key. The deny policy is written in `bootstrap/` and
-not applied yet: the founder's sign-in lacks the role that writes one. That
-the owner is refused is checked by hand once it is applied
-([runbook](../runbooks/bootstrap.md)). `mise run secrets:check` searches the
+permissions and the deny policy are applied since 2026-11-28 and the write
+credentials are encrypted with the new key. It was checked by hand on that
+day that the founder's sign-in, owner of the project, is refused when it
+decrypts a write credential, about a minute after the policy was written,
+while it still encrypts one and still decrypts the other files. `mise run secrets:check` searches the
 history for secrets in clear.
 
 ## Pros and Cons of the Options
