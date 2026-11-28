@@ -73,8 +73,17 @@ github:
     why: nothing changes on them, and GitHub refuses to read their settings
 
 google_workspace:
-  - what: domain-wide delegation of the two service accounts of the pipeline
-    why: the Admin console has no interface for it; done on 2026-11-28 for the two identities of the bootstrap, read-only scopes for the one that plans
+  # The whole directory is configured by hand (ADR-0012): the only provider that describes it is archived.
+  - what: the founder's user, the only one, with the public addresses of the company as aliases of its mailbox
+    why: no maintained provider describes users
+  - what: the role of super administrator, held by the founder alone
+    why: no maintained provider describes roles of administration
+  - what: the two domains of the directory, a primary one and a secondary one
+    why: no maintained provider describes domains; their DNS records are described with the zones
+  - what: the groups abuse and postmaster, which anyone may write to and whose only member is the founder
+    why: the platform refuses these two addresses as aliases, and no maintained provider describes the settings of a group
+  - what: domain-wide delegation of the two service accounts of the pipeline, given on 2026-11-28
+    why: it has no use since ADR-0012 and is to be removed in the Admin console, which has no interface for it
   - what: recovery email and phone of the founder
     why: personal data, never in git
   - what: the organizational unit and the role assignments that Google creates by itself
