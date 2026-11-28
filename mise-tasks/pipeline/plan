@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#MISE description="Plan the units, save each plan encrypted and write the public summary (ADR-0007, ADR-0008)"
+#USAGE flag "--affected" help="Only the units a branch changes, compared with the main branch"
+#
+# Writes, under .cache/pipeline/:
+#   artifact/plans/   the plan of each unit, encrypted by OpenTofu
+#   artifact/units    the units whose plan is not empty, one per line
+#   artifact/plan.log.enc.json   everything OpenTofu printed, encrypted
+#   summary.md        addresses and actions: the only public output
+#
+# GAP-002: the official action prints what this task keeps out of the log.
+#
+# The bootstrap is never planned here: it excludes itself (ADR-0009).
+set -euo pipefail
+
+# shellcheck source=mise-tasks/pipeline/lib.sh
+source "$(dirname "$0")/lib.sh"
+cd "$root"
+rm -rf "$out"
+mkdir -p "$out/artifact/plans" "$out/json" "$out/log"
+sign_in
+
+# Terragrunt keeps a copy of each unit in .cache/, and would take the copies
+# for units.
+filter=(--filter '!./.cache/**')
+if [ "${usage_affected:-false}" = true ]; then filter+=(--filter '[origin/main...HEAD]'); fi
+
+# The identity that plans cannot write the state, so it cannot lock it.
+status=0
+terragrunt run --all --non-interactive "${filter[@]}" \
+    --out-dir "$out/artifact/plans" --json-out-dir "$out/json" --report-file "$out/report.json" \
+    -- plan -input=false -lock=false >"$out/log/plan.log" 2>&1 || status=$?
+seal plan
+results
+
+# The summary, unit by unit. A plan made with --affected is under "@HEAD/".
+: >"$out/artifact/units"
+{
+    echo "### Plan"
+    echo
+    find "$out/json" -name tfplan.json | sort | while read -r file; do
+        unit="$(dirname "${file#"$out/json/"}")"
+        unit="${unit#@HEAD/}"
+        block="$(jq -r --arg unit "$unit" -f "$(dirname "$0")/summary.jq" "$file")"
+        if [ -n "$block" ]; then
+            echo "$unit" >>"$out/artifact/units"
+            printf '%s\n\n' "$block"
+        else
+            printf '**%s**: no change\n\n' "$unit"
+        fi
+    done
+    if [ -s "$out/report.json" ]; then
+        jq -r '.[] | select(.Result == "failed") | "**\(.Name)**: the plan failed\n"' "$out/report.json"
+    fi
+    if ! find "$out/json" -name tfplan.json | grep -q . && [ "$status" = 0 ]; then
+        echo "No unit is affected."
+        echo
+    fi
+    echo "Addresses and actions only. The detail is in the encrypted artifact of the run: \`mise run plan:show -- <run id>\`."
+} >"$out/summary.md"
+rm -rf "$out/json"
+
+if [ -n "${GITHUB_OUTPUT:-}" ]; then
+    if [ -s "$out/artifact/units" ]; then echo "changes=true"; else echo "changes=false"; fi >>"$GITHUB_OUTPUT"
+fi
+exit "$status"

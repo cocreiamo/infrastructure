@@ -95,6 +95,14 @@ format` formats; `mise run check` checks everything.
     encryption: both are generated from that one file (ADR 0004). Values
     that are not public come from an encrypted file next to the unit.
 
+19. **The key of an instance is public.** The summary of a plan shows the
+    address of each resource, and the key of a `for_each` is part of it: a
+    key is a name written in the code, never an identifier, an address or
+    another value that is not public.
+20. **A provider takes its credential from the environment**, never from an
+    input of the unit: a saved plan is made by the identity that reads and
+    applied by the one that changes.
+
 ## Questions to answer before proposing
 
 - Which task runs this, locally and in CI, with the same command?

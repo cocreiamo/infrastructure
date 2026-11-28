@@ -29,12 +29,12 @@ status = "open"
 [[gap]]
 id = "GAP-002"
 component = "gruntwork-io/terragrunt-action"
-version = "v3, README read on 2026-11-27"
-summary = "Its pull request comment (input tg_comment) posts the whole output of the command; there is no summary-only mode."
-impact = "The comment cannot be used in a public repository that keeps plan values private (ADR 0008)."
-workaround = "Keep tg_comment off and post a summary of addresses and actions from a workflow step. Not built yet."
+version = "v3.4.1, source read on 2026-11-28"
+summary = "It copies everything the command prints to the log of the job, and its pull request comment (input tg_comment) posts the same output; neither can be limited to a summary."
+impact = "The action cannot be used in a public repository that keeps plan values private (ADR 0008)."
+workaround = "mise-tasks/pipeline/plan"
 upstream = "not reported"
-resolved_when = "The action can post a comment limited to resource addresses and actions."
+resolved_when = "The action can run a command without printing its output, and post a comment limited to resource addresses and actions."
 status = "open"
 
 [[gap]]

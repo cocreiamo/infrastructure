@@ -91,7 +91,7 @@ description = "Lint and check the formatting of the repository's files"
 run = [
   "ruff check .",
   "ruff format --check .",
-  "shellcheck mise-tasks/model/check mise-tasks/model/export mise-tasks/code/test mise-tasks/bootstrap",
+  "shellcheck -x mise-tasks/model/check mise-tasks/model/export mise-tasks/code/test mise-tasks/bootstrap mise-tasks/pipeline/plan mise-tasks/pipeline/apply mise-tasks/pipeline/lib.sh mise-tasks/plan/show",
   "prettier --check .",
   "taplo fmt --check",
   "typos",

@@ -5,6 +5,15 @@ include "root" {
   path = find_in_parent_folders("root.hcl")
 }
 
+# The pipeline runs every unit at once, and this one is not its own to run:
+# the identity that plans cannot read what it describes, and no change to
+# what the pipeline may do is applied by the pipeline. Run alone, by hand, it
+# runs as before.
+exclude {
+  if      = true
+  actions = ["all"]
+}
+
 # Identifiers and addresses that are not public (ADR-0008).
 inputs = yamldecode(sops_decrypt_file("${get_terragrunt_dir()}/inputs.enc.yaml"))
 

@@ -15,6 +15,10 @@ creation_rules:
   # without being able to read it.
   - path_regex: ^secrets/apply/[A-Z0-9_]+\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure-apply/cryptoKeys/secrets-apply
+  # What OpenTofu printed in a run of the pipeline: it holds values of resources, so it leaves the runner only
+  # encrypted, with the key of the state and of the plans (ADR-0008). The path is given to SOPS by the task.
+  - path_regex: ^\.cache/pipeline/log/[a-z]+\.log$
+    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/state
   # Recovery codes of the accounts: only the founder decrypts them, never the pipeline.
   - path_regex: ^secrets/recovery\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/recovery
