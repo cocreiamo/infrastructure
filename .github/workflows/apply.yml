@@ -22,7 +22,7 @@ concurrency:
 jobs:
   plan:
     name: Plan of every unit
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     environment: plan
     permissions:
@@ -59,7 +59,7 @@ jobs:
     name: Apply of the approved plans
     needs: plan
     if: needs.plan.outputs.changes == 'true'
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 60
     # Entered only from main, and only after the maintainer approves the run.
     environment: apply

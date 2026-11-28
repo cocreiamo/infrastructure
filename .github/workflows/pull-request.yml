@@ -12,7 +12,7 @@ permissions: {}
 jobs:
   title:
     name: Conventional Commits title
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       pull-requests: read
     steps:
@@ -22,7 +22,7 @@ jobs:
 
   dependencies:
     name: Dependency review
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     steps:
