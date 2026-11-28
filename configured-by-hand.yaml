@@ -19,8 +19,8 @@ secrets_and_keys:
 created_by_hand_to_import:
   - what: this repository
     why: it had to exist before its own settings could be described (ADR-0009); created on 2026-11-27
-  - what: the Google Cloud project that holds state and keys, its key ring and three keys
-    why: the secrets of the previous repository had to be re-encrypted before anything else (ADR-0009); created on 2026-11-27
+  - what: the Google Cloud project that holds state and keys, its key ring and four keys
+    why: the secrets of the previous repository had to be re-encrypted before anything else (ADR-0009); created on 2026-11-27, adopted by bootstrap/
   - what: the rules of the main branch and the security settings of this repository
     why: the guardrails came before the code; applied on 2026-11-27 from .github/rulesets/main.json
 
@@ -67,6 +67,8 @@ github:
     why: it deploys the sites of two tenants; it goes when they leave Hostinger
   - what: the Renovate application of its vendor
     why: it proposes updates (ADR-0010); installing an application is an act of the owner in the browser
+  - what: in the console of that vendor, the organization left silent and pull requests turned on for this repository and one other
+    why: the vendor's console has no interface; set on 2026-11-28
   - what: the archived repositories
     why: nothing changes on them, and GitHub refuses to read their settings
 

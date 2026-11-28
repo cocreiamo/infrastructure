@@ -18,9 +18,9 @@ built yet.
 ## Procedures still to write
 
 Requirement R32 asks for a written procedure for each of these. Each is
-written with the code it describes:
+written with the code it describes. The bootstrap has its own:
+[bootstrap.md](bootstrap.md).
 
-- the bootstrap, from nothing;
 - adding or replacing a secret;
 - restoring an earlier version of a state;
 - answering a leaked credential.

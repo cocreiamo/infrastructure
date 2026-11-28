@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# MISE description="Plan or apply the bootstrap by hand, with the maintainer's own sign-in (docs/runbooks/bootstrap.md)"
+#
+# Usage:
+#   mise run bootstrap -- plan            write a plan and show it
+#   mise run bootstrap -- apply           apply the plan just written
+#   mise run bootstrap -- <anything else> pass it to OpenTofu through Terragrunt
+#
+# BOOTSTRAP_LOCAL_STATE=1 keeps the state on this machine: only for the first
+# apply, when the state store does not exist yet.
+#
+# The sign-in to Google Cloud and to GitHub is taken from gcloud and gh for
+# the length of the command. No credential file is written.
+set -euo pipefail
+
+GOOGLE_OAUTH_ACCESS_TOKEN="$(gcloud auth print-access-token)"
+GITHUB_TOKEN="$(gh auth token)"
+export GOOGLE_OAUTH_ACCESS_TOKEN GITHUB_TOKEN
+
+root="$(git rev-parse --show-toplevel)"
+plan="$root/.cache/plans/bootstrap.tfplan"
+mkdir -p "$(dirname "$plan")"
+
+feature=()
+if [ "${BOOTSTRAP_LOCAL_STATE:-}" = 1 ]; then feature=(--feature local_state=true); fi
+
+cd "$root/bootstrap"
+case "${1:-}" in
+plan) terragrunt run "${feature[@]}" -- plan -input=false -out="$plan" "${@:2}" ;;
+apply) terragrunt run "${feature[@]}" -- apply -input=false "$plan" ;;
+"") echo "usage: mise run bootstrap -- plan | apply | <opentofu arguments>" >&2 && exit 2 ;;
+*) terragrunt run "${feature[@]}" -- "$@" ;;
+esac

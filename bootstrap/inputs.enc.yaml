@@ -1,0 +1,13 @@
+organization_id: ENC[AES256_GCM,data:s1mNwFgusFipqYw=,iv:zSMxjTKn4d7Cu+sHjFs0mROgor0RTDUtRyYkddqMFFY=,tag:rhRgaxwrpB9qHm35dC68NQ==,type:str]
+billing_account: ENC[AES256_GCM,data:+8MG57lwPDFrUxInfHyXinpI2Bg=,iv:g0KG4b9cG18PtHSdRAcd2JownY2TmIF2YJCZmmy8XIc=,tag:dEugSXaKEBIgEheaIgm7Yw==,type:str]
+contacts:
+    - ENC[AES256_GCM,data:0E+mt0gwcYFjwfa7hB2FlNrhIsaNjkcX1yhXJlOQLQ==,iv:ZG966w2GqP2NpkLE6bf7lwIeiFS3J9/SH4Wwzhsr0Iw=,tag:yMUSgku4VViefgiDv7G6iw==,type:str]
+sops:
+    gcp_kms:
+        - created_at: "2026-11-28T03:27:08Z"
+          enc: CiQASNTjEkZHXznmJ25wsJ5jx76dOgpDo1I8KHkgAHKRdR5QwU0SSQAQ32Dry7sHUKgYpPa8MQkhcEUP6SADKsBFMqRQctyvJZlgKO3cITD76RXyAIvgTxesvOqa8hkAnUgocZiSvCVqoUEQKzgUxq4=
+          resource_id: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
+    lastmodified: "2026-11-28T03:27:09Z"
+    mac: ENC[AES256_GCM,data:fPCPI8MhfkqytpdKn7/hIajv1U5iZa3U4CBVsPCGzYPp3YMyQIS8whcAkQLAwfRcGykNSETesb8ttBg3HrqWx8cIxNuWeJ32wn2QfmSH/XW9PtG7t7Hm4BMVR5xvhXYn5geGPxyI/HtMqjU9QlcV3J9sB4SJTMR4YuoBqYXB1bE=,iv:VYFTE8rJIexxnxSqN5WLpDIwNlryZV7HL8ncXshDQ9I=,tag:QZH9iPo7/JIOgG49TAWfmA==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3

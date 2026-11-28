@@ -43,12 +43,15 @@ UV_PROJECT_ENVIRONMENT = "{{config_root}}/.cache/venv"
 # Everything generated or cached lives in .cache/, the one ignored directory.
 PYTHONPYCACHEPREFIX = "{{config_root}}/.cache/pycache"
 RUFF_CACHE_DIR = "{{config_root}}/.cache/ruff"
+# Terragrunt copies each unit here before running it, so nothing is written next to the code.
+TG_DOWNLOAD_DIR = "{{config_root}}/.cache/terragrunt"
 # OMG SysML v2 Pilot Implementation, the validator of model/*.sysml.
 SYSML_PILOT_RELEASE = "2026-09.1"
 SYSML_PILOT_VERSION = "0.63.1"
 SYSML_PILOT_SHA256 = "2ab938037b8d3a02a3518019b6e81b356a994f4a5214727bfedcfd64bad25415"
 
 # model:check and model:export are file tasks in mise-tasks/model/;
+# code:test is a file task in mise-tasks/code/; bootstrap is mise-tasks/bootstrap;
 # generate and generate:check are file tasks in mise-tasks/generate/.
 
 [tasks."code:check"]
@@ -88,7 +91,7 @@ description = "Lint and check the formatting of the repository's files"
 run = [
   "ruff check .",
   "ruff format --check .",
-  "shellcheck mise-tasks/model/check mise-tasks/model/export",
+  "shellcheck mise-tasks/model/check mise-tasks/model/export mise-tasks/code/test mise-tasks/bootstrap",
   "prettier --check .",
   "taplo fmt --check",
   "typos",
@@ -115,6 +118,7 @@ depends = [
   "secrets:check",
   "lint",
   "code:check",
+  "code:test",
   "workflows:check",
   "test",
 ]

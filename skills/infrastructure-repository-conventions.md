@@ -87,6 +87,14 @@ format` formats; `mise run check` checks everything.
 16. **A workaround names its `GAP-nnn` in a comment**, and a test checks
     that every id used is registered (R5).
 
+17. **A unit is tested without credentials.** Its tests are in
+    `<unit>/tests/*.tftest.hcl`, plan it against simulated providers and
+    are run by `mise run code:test`. A run that implements a verification
+    is named like it, `test_<id>_<what it checks>`.
+18. **A unit includes `root.hcl`** and declares no backend and no
+    encryption: both are generated from that one file (ADR 0004). Values
+    that are not public come from an encrypted file next to the unit.
+
 ## Questions to answer before proposing
 
 - Which task runs this, locally and in CI, with the same command?
