@@ -117,3 +117,24 @@ run "test_R31_earlier_state_restorable" {
     error_message = "No earlier version may be removed before 90 days."
   }
 }
+
+# Part of R16: the identity of a pull request holds no role that changes
+# anything outside its own project either.
+run "pull_request_identity_only_reads_the_organization" {
+  command = plan
+
+  assert {
+    condition = alltrue([
+      for access in google_organization_iam_member.pipeline :
+      contains(local.organization_roles_read, access.role) if access.member == local.pipeline.plan
+    ])
+    error_message = "The identity of a pull request may only hold roles that read."
+  }
+  assert {
+    condition = alltrue([
+      for role in local.organization_roles_read :
+      endswith(role, "iewer") || endswith(role, "eviewer") || role == "roles/browser"
+    ])
+    error_message = "A role that reads must be a viewer role."
+  }
+}
