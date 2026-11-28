@@ -80,9 +80,12 @@ open its plans later, and one that has published them cannot take them back.
 
 ### Confirmation
 
-Requirement R19 states what must hold. Its test is not written: it will plan
-a resource carrying a known marker value and fail if the marker appears in
-any comment, log or summary. Nothing is built yet.
+Requirement R19 states what must hold. Its test plans a resource carrying a
+known marker value and fails if the marker appears in the summary; it also
+checks that the tasks send everything OpenTofu prints to a file and that a
+workflow publishes the summary only. That file is encrypted with the key
+of the state and uploaded with the plans, so a failure is read with the
+same command as a plan. The logs of a real run have not been inspected yet.
 
 ## Pros and Cons of the Options
 

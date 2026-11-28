@@ -46,25 +46,31 @@ leaves to us is small.
    with `--filter-affected`, which compares the branch with `main` and needs
    the whole history checked out; a unit that was removed is destroyed only
    when `--filter-allow-destroy` is also given.
-3. Tools are installed by mise; Terragrunt is run by the official
-   `gruntwork-io/terragrunt-action`, which reads the versions from
-   `mise.toml`. Its pull request comment stays off (GAP-002).
+3. Tools are installed by mise, and Terragrunt is run by mise tasks
+   (`pipeline:plan`, `pipeline:apply`), the same on a runner and on the
+   maintainer's machine. The official `gruntwork-io/terragrunt-action` is
+   not used: it copies everything the command prints to the log of the
+   job, which is public here (GAP-002), and it installs a second mise at a
+   version of its own.
 4. **Three workflows**: on a pull request, the checks, the plan of the
    affected units and a summary comment
    ([ADR-0008](0008-plan-visibility.md)); on a merge to `main`, plan, wait
    for approval, apply; on a schedule, the drift check
    ([ADR-0010](0010-updates-and-drift.md)).
 5. **The plan reaches the apply inside one run.** The workflow started by a
-   merge has two jobs: `plan` makes the plan of each affected unit and
-   uploads the encrypted files as an artifact; `apply` needs `plan`, waits
+   merge has two jobs: `plan` makes the plan of every unit and uploads
+   the encrypted files as an artifact (every unit, not only the ones the
+   merge changed, so that a run cancelled or refused leaves nothing a later
+   run would miss); when no plan has a change the run ends there; `apply` needs `plan`, waits
    for the approval of the `apply` Environment, downloads the artifact of
    the same run and applies those files. The artifact is kept for 7 days.
 6. **When `main` moves in the meantime**, nothing special is built: OpenTofu
    itself refuses a saved plan that is no longer current, and the run is
    started again. The workflow has a `concurrency` group that never cancels
-   a run in progress, so applies queue and never overlap; the maintainer
-   approves the newest run and cancels the ones before it. The state backend
-   locks each unit besides.
+   a run in progress, so runs queue and never overlap: a run plans only
+   when the one before it has ended, and its plan is current. The state
+   backend locks each unit besides. The bootstrap excludes itself from
+   these runs ([ADR-0009](0009-bootstrap.md)).
 7. **The public summary is made from the plan as data, never from its
    text**: `tofu show -json` writes to a file, and a `jq` filter keeps the
    address and the actions of each resource and nothing else.
@@ -87,9 +93,10 @@ action.
 
 ### Confirmation
 
-Requirements R25, R26, R27 and R28 state what must hold; their tests are not
-written. Only the workflow that runs the checks exists; the three workflows
-above are not built.
+Requirements R25, R26, R27 and R28 state what must hold. R25, R26 and R28
+have tests that read the workflows and the tasks; the test of R27 is not
+written. The three workflows are written; it is still to be seen in a real
+run that the federation, the approval and the apply of a saved plan work.
 
 ## Pros and Cons of the Options
 

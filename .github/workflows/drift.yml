@@ -1,0 +1,63 @@
+name: Drift
+
+# Once a day every unit is compared with the real resources (ADR 0010). A
+# difference opens an issue with the same summary a pull request gets:
+# addresses and actions, never a value (ADR 0008). The job signs in as the
+# identity that only reads.
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: drift
+  cancel-in-progress: false
+
+jobs:
+  drift:
+    name: Plan of every unit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: plan
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@924e7c586e33d7d4bae9c14e26c5d22e2beb6e78 # v5.3.0
+        with:
+          version: 2026.11.14
+      - uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GOOGLE_SERVICE_ACCOUNT }}
+      - id: plan
+        run: mise run pipeline:plan
+      - if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: plan
+          path: .cache/pipeline/artifact
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+      # One open issue at a time: a difference that lasts is a comment on it.
+      - if: always() && (failure() || steps.plan.outputs.changes == 'true') && hashFiles('.cache/pipeline/summary.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: "Drift: the resources differ from the code"
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          printf '\nRun: %s\n' "$RUN" >> .cache/pipeline/summary.md
+          open="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "in:title \"$TITLE\"" --json number --jq '.[0].number // empty')"
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --repo "$GITHUB_REPOSITORY" --body-file .cache/pipeline/summary.md
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" --body-file .cache/pipeline/summary.md
+          fi

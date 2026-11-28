@@ -79,7 +79,8 @@ nothing to run, works from the first day, and is how `anima` does it.
 ### Confirmation
 
 Requirements R29 and R30 state what must hold; their tests are not written.
-The drift workflow is not built. `.github/renovate.json` exists and the application was installed on every
+The drift workflow is written and R29 has a test that reads it; it has not
+run yet. `.github/renovate.json` exists and the application was installed on every
 repository of the organization on 2026-11-27. What ages and how it shows is in the runbook
 [upkeep](../runbooks/upkeep.md).
 

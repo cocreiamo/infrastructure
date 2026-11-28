@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#MISE description="Show the full detail of the plans and logs of a pipeline run, with the maintainer's own sign-in (ADR-0008)"
+#USAGE arg "<run>" help="The id of the run, as in its address"
+#
+# The detail is printed on this terminal and nowhere else: it holds values of
+# resources, so it is never pasted in an issue, a pull request or a commit.
+set -euo pipefail
+
+# shellcheck source=mise-tasks/pipeline/lib.sh
+source "$(dirname "$0")/../pipeline/lib.sh"
+run="${usage_run:?}"
+if [[ ! "$run" =~ ^[0-9]+$ ]]; then echo "a run id is a number" >&2 && exit 2; fi
+cd "$root"
+shown="$root/.cache/shown/$run"
+rm -rf "$shown"
+mkdir -p "$shown"
+sign_in
+
+gh run download "$run" --dir "$shown"
+find "$shown" -name tfplan.tfplan | sort | while read -r file; do
+    unit="$(dirname "${file#"$shown"/*/plans/}")"
+    unit="${unit#@HEAD/}"
+    echo "==== $unit"
+    (cd "$root/$unit" && terragrunt run --non-interactive --log-level error -- show "$file")
+done
+find "$shown" -name '*.log.enc.json' | sort | while read -r file; do
+    echo "==== $(basename "$file" .log.enc.json) log"
+    sops decrypt --input-type json --output-type binary "$file"
+done

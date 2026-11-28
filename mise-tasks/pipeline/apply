@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#MISE description="Apply the saved plans of a run, as they were approved; never plans again (ADR-0007)"
+#
+# Reads .cache/pipeline/artifact/, written by pipeline:plan in the same run:
+# the encrypted plans and the list of the units whose plan is not empty.
+# OpenTofu itself refuses a plan that is no longer current.
+set -euo pipefail
+
+# shellcheck source=mise-tasks/pipeline/lib.sh
+source "$(dirname "$0")/lib.sh"
+cd "$root"
+mkdir -p "$out/log"
+rm -f "$out/report.json"
+sign_in
+
+filter=()
+while read -r unit; do
+    # A unit is a directory of this repository and nothing else.
+    if [[ ! "$unit" =~ ^[a-z0-9][a-z0-9/_-]*$ ]] || [ ! -f "$unit/terragrunt.hcl" ]; then
+        echo "not a unit: refused" >&2
+        exit 1
+    fi
+    if [ ! -f "$out/artifact/plans/$unit/tfplan.tfplan" ]; then
+        echo "$unit: no saved plan" >&2
+        exit 1
+    fi
+    filter+=(--filter "./$unit")
+done <"$out/artifact/units"
+if [ "${#filter[@]}" = 0 ]; then echo "nothing to apply" && exit 0; fi
+
+status=0
+terragrunt run --all --non-interactive "${filter[@]}" \
+    --out-dir "$out/artifact/plans" --report-file "$out/report.json" \
+    -- apply -input=false >"$out/log/apply.log" 2>&1 || status=$?
+rm -rf "$out/artifact"
+seal apply
+results
+exit "$status"
