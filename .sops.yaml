@@ -4,8 +4,8 @@ creation_rules:
   # Codename -> real names of each tenant; the pull request identity must read it to plan.
   - path_regex: ^tenants\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
-  # Identifiers and addresses the bootstrap needs and that are not public (ADR-0008).
-  - path_regex: ^bootstrap/inputs\.enc\.yaml$
+  # Identifiers and addresses a unit needs and that are not public (ADR-0008); the identity that plans reads them.
+  - path_regex: ^([a-z0-9-]+/)+inputs\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
   # Credentials that only read.
   - path_regex: ^secrets/plan\.enc\.yaml$
