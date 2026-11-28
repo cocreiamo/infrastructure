@@ -1,0 +1,360 @@
+# The public repositories of the organization, as found on 2026-11-28: one
+# entry each, read by repositories.tf. A fork names the repository it was
+# forked from. Archived repositories are left out (configured-by-hand.yaml).
+.github:
+  description: "Shared defaults of the cocreiamo organization: community health files, agent skills and roles, reusable workflows"
+  homepage: ""
+  issues: true
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+Backlog.md:
+  description: Backlog.md - A tool for managing project collaboration between humans and AI Agents in a git ecosystem
+  homepage: https://backlog.md
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: MrLesk/Backlog.md
+IvorySQL:
+  description: Open Source Oracle Compatible PostgreSQL.
+  homepage: https://ivorysql.org
+  issues: true
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: IvorySQL/IvorySQL
+anima:
+  description: ""
+  homepage: ""
+  issues: true
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: true
+anima-keycloak:
+  description: Open Source Identity and Access Management For Modern Applications and Services
+  homepage: https://www.keycloak.org
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: true
+  secret_scanning: false
+  fork_of: keycloak/keycloak
+anima-mailpit:
+  description: An email and SMTP testing tool with API for developers
+  homepage: https://mailpit.axllent.org
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: axllent/mailpit
+anima-openbao:
+  description: OpenBao is a software solution to manage, store, and distribute sensitive data including secrets, certificates, and keys.
+  homepage: https://openbao.org/
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: true
+  secret_scanning: false
+  fork_of: openbao/openbao
+anima-opentofu:
+  description: OpenTofu lets you declaratively manage your cloud infrastructure.
+  homepage: https://opentofu.org
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: true
+  secret_scanning: false
+  fork_of: opentofu/opentofu
+anima-pg-oidc-validator:
+  description: OAuth validator for PostgreSQL
+  homepage: ""
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: percona/pg_oidc_validator
+anima-pgbackrest:
+  description: Reliable PostgreSQL Backup & Restore
+  homepage: https://pgbackrest.org
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: pgbackrest/pgbackrest
+anima-pgvector:
+  description: Open-source vector similarity search for Postgres
+  homepage: ""
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: pgvector/pgvector
+anima-postgres:
+  description: Mirror of the official PostgreSQL GIT repository. Note that this is just a *mirror* - we don't work with pull requests on github. To contribute, please see https://wiki.postgresql.org/wiki/Submitting_a_Patch
+  homepage: https://www.postgresql.org/
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: postgres/postgres
+anima-terraform-provider-keycloak:
+  description: "Terraform provider for Keycloak "
+  homepage: https://registry.terraform.io/providers/keycloak/keycloak/latest/docs
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: true
+  secret_scanning: false
+  fork_of: keycloak/terraform-provider-keycloak
+anima-terraform-provider-postgresql:
+  description: Terraform PostgreSQL provider
+  homepage: https://www.terraform.io/docs/providers/postgresql/
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: cyrilgdn/terraform-provider-postgresql
+anima-terraform-provider-vault:
+  description: Terraform Vault provider
+  homepage: https://www.terraform.io/docs/providers/vault/
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: hashicorp/terraform-provider-vault
+cnpg-plugin-pgbackrest:
+  description: pgBackRest CNPG-I plugin for CloudNativePG
+  homepage: ""
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: dalibo/cnpg-plugin-pgbackrest
+distribution:
+  description: The toolkit to pack, ship, store, and deliver container content
+  homepage: https://distribution.github.io/distribution
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: true
+  secret_scanning: false
+  fork_of: distribution/distribution
+infrastructure:
+  description: "The infrastructure of Cocreiamo as code: OpenTofu and Terragrunt for Google Cloud, GitHub and Cloudflare"
+  homepage: ""
+  issues: true
+  wiki: true
+  projects: true
+  merge_commit: false
+  rebase: false
+  delete_branch: true
+  signoff: false
+  secret_scanning: true
+ivorysql_docs:
+  description: adoc for ivorysql
+  homepage: ""
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: IvorySQL/ivorysql_docs
+keycloak-phone-provider:
+  description: A Keycloak provider for phone and SMS
+  homepage: ""
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: cooperlyt/keycloak-phone-provider
+loki:
+  description: Like Prometheus, but for logs.
+  homepage: https://grafana.com/oss/loki
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: true
+  secret_scanning: false
+  fork_of: grafana/loki
+mimir:
+  description: Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus.
+  homepage: https://grafana.com/oss/mimir/
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: grafana/mimir
+packages.groonga.org:
+  description: Stuff for packages.groonga.org that provides packages for Groonga family
+  homepage: http://packages.groonga.org/
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: groonga/packages.groonga.org
+pg-schema-diff:
+  description: Go library for diffing Postgres schemas and generating SQL migrations
+  homepage: ""
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: stripe/pg-schema-diff
+pgnodemx:
+  description: A PostgreSQL extension that provides SQL functions to allow capture of node OS metrics via SQL queries.
+  homepage: ""
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: pgnodemx/pgnodemx
+pgroonga:
+  description: PGroonga is a PostgreSQL extension to use Groonga as index. PGroonga makes PostgreSQL fast full text search platform for all languages!
+  homepage: https://pgroonga.github.io/
+  issues: false
+  wiki: true
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: pgroonga/pgroonga
+postgrest:
+  description: REST API for any Postgres database
+  homepage: https://postgrest.org
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: PostgREST/postgrest
+postgrest-openapi:
+  description: OpenAPI output generated in SQL for a PostgREST instance
+  homepage: ""
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: PostgREST/postgrest-openapi
+pyroscope:
+  description: Continuous Profiling Platform. Debug performance issues down to a single line of code
+  homepage: https://grafana.com/oss/pyroscope/
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: grafana/pyroscope
+refine:
+  description: A React Framework for building  internal tools, admin panels, dashboards & B2B apps with unmatched flexibility.
+  homepage: https://refine.dev
+  issues: false
+  wiki: false
+  projects: true
+  merge_commit: true
+  rebase: true
+  delete_branch: false
+  signoff: false
+  secret_scanning: false
+  fork_of: refinedev/refine

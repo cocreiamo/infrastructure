@@ -36,5 +36,11 @@ generate "imports" {
       to = github_membership.owner
       id = "$${local.organization}:$${var.owner_username}"
     }
+
+    import {
+      for_each = local.repositories
+      to       = github_repository.this[each.key]
+      id       = each.key
+    }
   IMPORTS
 }
