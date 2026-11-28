@@ -89,7 +89,7 @@ risk on 2026-11-27; it is to be reconsidered when a second person joins.
 
 Requirements R15, R16, R17, R18, R20 and R21 state what must hold; their
 tests are not written. The rules on `main` are in
-`.github/rulesets/main.json` and are applied after the first push.
+`source-control/rules.tf`, adopted on 2026-11-28, and R20 has its test.
 `mise run workflows:check` (actionlint and zizmor) checks pinning and
 permissions of every workflow.
 

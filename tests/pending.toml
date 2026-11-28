@@ -16,7 +16,6 @@ pending = [
   "test_R14_no_key_material_outside_key_service",
   "test_R15_no_stored_credential_for_federated_platform",
   "test_R18_outside_change_gets_no_credential",
-  "test_R20_main_branch_protected",
   "test_R21_pipeline_least_privilege",
   "test_R22_adoption_leaves_no_difference",
   "test_R23_adoption_declared_in_code",

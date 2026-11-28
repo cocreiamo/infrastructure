@@ -40,3 +40,28 @@ run "a_pushed_secret_is_refused_in_every_new_repository" {
     error_message = "A new repository must refuse a push that carries a secret."
   }
 }
+
+# R20: the main branch changes only through a pull request whose checks
+# pass, is never rewritten or deleted, and holds signed commits only.
+run "test_R20_main_branch_protected" {
+  command = plan
+
+  assert {
+    condition = alltrue([
+      for name in ["infrastructure-main", "anima-main"] : alltrue([
+        github_repository_ruleset.this[name].enforcement == "active",
+        github_repository_ruleset.this[name].conditions[0].ref_name[0].include == tolist(["~DEFAULT_BRANCH"]),
+        github_repository_ruleset.this[name].rules[0].required_signatures,
+        github_repository_ruleset.this[name].rules[0].non_fast_forward,
+        github_repository_ruleset.this[name].rules[0].deletion,
+        length(github_repository_ruleset.this[name].rules[0].pull_request) == 1,
+        length(github_repository_ruleset.this[name].rules[0].required_status_checks[0].required_check) > 0,
+      ])
+    ])
+    error_message = "The main branch must require a pull request, passing checks and signed commits, and refuse rewriting and deletion."
+  }
+  assert {
+    condition     = alltrue([for rule in github_repository_ruleset.this : length(rule.bypass_actors) == 0])
+    error_message = "Nobody bypasses a rule."
+  }
+}
