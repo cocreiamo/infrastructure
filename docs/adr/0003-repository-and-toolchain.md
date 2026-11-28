@@ -58,7 +58,7 @@ every driver.
    | Directory             | What it holds                                                       |
    | --------------------- | ------------------------------------------------------------------- |
    | `bootstrap/`          | What the pipeline stands on ([ADR-0009](0009-bootstrap.md))         |
-   | `organization/`       | Who administers what: roles, policies, users, groups, billing       |
+   | `organization/`       | Who administers what: roles, policies, contacts, folders, billing   |
    | `source-control/`     | Repositories, their rules and settings                              |
    | `dns/`                | Zones and records                                                   |
    | `email/`              | Sending, receiving, and the policies that protect mail              |
