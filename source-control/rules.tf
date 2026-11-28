@@ -31,6 +31,9 @@ locals {
         "reuse / reuse",
         "pull-request / Conventional Commits title",
         "pull-request / Dependency review",
+        # Required since 2026-11-28: a change had entered main through the
+        # queue with these tests failed.
+        "System tests",
       ]
       up_to_date = false
       queue      = true
