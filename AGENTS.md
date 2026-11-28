@@ -1,6 +1,6 @@
 # Infrastructure: instructions for AI agents
 
-This repository will hold the infrastructure of Cocreiamo as code, in the open: the Google Cloud, GitHub and Cloudflare resources of the company, described with OpenTofu and Terragrunt and changed only through pull requests. Today it holds the decisions, the requirements, the bootstrap, the pipeline that plans and applies, and the first unit it runs, the Google Cloud organization.
+This repository will hold the infrastructure of Cocreiamo as code, in the open: the Google Cloud, GitHub and Cloudflare resources of the company, described with OpenTofu and Terragrunt and changed only through pull requests. Today it holds the decisions, the requirements, the bootstrap, the pipeline that plans and applies, and the units it runs: the Google Cloud organization and the settings of the GitHub organization.
 
 ## Start here
 

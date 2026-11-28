@@ -19,6 +19,7 @@ cd "$root"
 rm -rf "$out"
 mkdir -p "$out/artifact/plans" "$out/json" "$out/log"
 sign_in
+credentials plan
 
 # Terragrunt keeps a copy of each unit in .cache/, and would take the copies
 # for units.
