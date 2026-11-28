@@ -70,10 +70,11 @@ natively, and leaves no key to guard.
 
 ### Confirmation
 
-Requirements R10, R11, R12, R28 and R31 state what must hold; their tests are
-not written and are listed in `tests/pending.toml`. The project and the key
-ring exist, created by hand ([ADR-0009](0009-bootstrap.md)); the bucket does
-not.
+Requirements R10, R11, R12, R28 and R31 state what must hold. R11, R12 and
+R31 have their tests; the others are listed in `tests/pending.toml`. The
+bucket is written in `bootstrap/` and the backend and the encryption in
+`root.hcl`. Both are in use since 2026-11-28: the state of the bootstrap is
+in the bucket, encrypted.
 
 ## Pros and Cons of the Options
 

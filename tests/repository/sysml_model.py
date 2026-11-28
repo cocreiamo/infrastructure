@@ -4,6 +4,7 @@ Implementation, never by parsing the text ourselves.
 
 import ast
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -83,7 +84,11 @@ def verifications(model):
 
 
 def names_of_tests():
-    """Names of the written tests that implement a verification (test_R...)."""
+    """Names of the written tests that implement a verification (test_R...).
+
+    A test is a Python function under tests/, or a run of the tests of a unit
+    (`run "test_R..."` in a *.tftest.hcl file).
+    """
     names = set()
     for path in (ROOT / "tests").rglob("test_*.py"):
         tree = ast.parse(path.read_text())
@@ -92,4 +97,15 @@ def names_of_tests():
             for node in ast.walk(tree)
             if isinstance(node, ast.FunctionDef) and node.name.startswith("test_R")
         }
+    for path in unit_test_files():
+        names |= set(re.findall(r'^run "(test_R\w+)"', path.read_text(), re.MULTILINE))
     return names
+
+
+def unit_test_files():
+    """The test files of the units, wherever they are, outside the cache."""
+    return sorted(
+        p
+        for p in ROOT.rglob("*.tftest.hcl")
+        if ".cache" not in p.relative_to(ROOT).parts
+    )

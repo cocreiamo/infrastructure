@@ -63,7 +63,42 @@ def test_R1_every_dependency_pinned():
         assert DIGEST.search(feature), feature
         assert EXACT_VERSION.search(options["version"]), feature
 
-    # Providers and modules are checked here when the first unit exists.
+    # Providers, modules and OpenTofu itself: exact versions in every unit,
+    # and a lock file with the checksums of its providers.
+    units = {p.parent for p in unit_files()}
+    assert units, "no unit found"
+    for path in unit_files():
+        for version in re.findall(
+            r'^\s*(?:required_)?version\s*=\s*"([^"]*)"', path.read_text(), re.MULTILINE
+        ):
+            assert EXACT_VERSION.fullmatch(version), (
+                f"{path.relative_to(ROOT)}: {version}"
+            )
+    for unit in units:
+        sources = {
+            source
+            for path in unit.glob("*.tf")
+            for source in re.findall(
+                r'source\s*=\s*"([\w-]+/[\w-]+)"\n\s*version', path.read_text()
+            )
+        }
+        if not sources:
+            continue
+        lock = unit / ".terraform.lock.hcl"
+        assert lock.exists(), f"{unit.relative_to(ROOT)}: no lock file"
+        locked = lock.read_text()
+        for source in sources:
+            assert f'/{source}"' in locked, (
+                f"{unit.relative_to(ROOT)}: {source} not locked"
+            )
+        assert locked.count("hashes = [") == locked.count("provider "), lock
+
+
+def unit_files():
+    """The OpenTofu files of the units, outside the cache."""
+    return sorted(
+        p for p in ROOT.rglob("*.tf") if ".cache" not in p.relative_to(ROOT).parts
+    )
 
 
 def test_R3_every_file_licensed():
@@ -263,3 +298,37 @@ def test_by_hand_register_well_formed():
         for entry in entries:
             assert set(entry) == {"what", "why"}, f"{section}: {entry}"
             assert entry["what"] and entry["why"], f"{section}: {entry}"
+
+
+def test_R12_state_store_and_keys_not_removable():
+    """No change can remove the state store, a key or the project that holds them.
+
+    OpenTofu refuses a plan that destroys a resource marked `prevent_destroy`,
+    and the mark cannot be read from a plan: it is read from the code. The
+    project also carries a lien, which the platform itself enforces.
+    """
+    protected = {"google_storage_bucket", "google_kms_crypto_key", "google_project"}
+    block = re.compile(
+        r'^resource "(\w+)" "(\w+)" \{\n(.*?)^\}', re.MULTILINE | re.DOTALL
+    )
+    found = set()
+    for path in ROOT.rglob("*.tf"):
+        if ".cache" in path.relative_to(ROOT).parts:
+            continue
+        for kind, name, body in block.findall(path.read_text()):
+            if kind in protected:
+                found.add(kind)
+                assert re.search(
+                    r"^\s*prevent_destroy\s*=\s*true$", body, re.MULTILINE
+                ), f"{path.relative_to(ROOT)}: {kind}.{name} can be destroyed"
+    assert found == protected, f"not described by any unit: {sorted(protected - found)}"
+    liens = [
+        body
+        for path in ROOT.rglob("*.tf")
+        if ".cache" not in path.relative_to(ROOT).parts
+        for kind, _, body in block.findall(path.read_text())
+        if kind == "google_resource_manager_lien"
+    ]
+    assert any("resourcemanager.projects.delete" in body for body in liens), (
+        "no lien forbids deleting the project"
+    )

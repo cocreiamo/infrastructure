@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#MISE description="Run the tests of every unit against simulated providers: no credential, nothing touched"
+#
+# A unit is a directory with a tests/ directory of *.tftest.hcl files. Each is
+# tested as plain OpenTofu, without Terragrunt: no backend, no state, no
+# sign-in. What OpenTofu downloads goes to .cache/.
+set -euo pipefail
+
+root="${MISE_PROJECT_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+cd "$root"
+
+find . -path ./.cache -prune -o -name '*.tftest.hcl' -printf '%h\n' | sed 's|/tests$||' | sort -u |
+    while read -r unit; do
+        export TF_DATA_DIR="$root/.cache/tofu/${unit#./}"
+        tofu -chdir="$unit" init -backend=false -input=false -lockfile=readonly >/dev/null
+        tofu -chdir="$unit" test
+    done

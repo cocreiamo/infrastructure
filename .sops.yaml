@@ -4,13 +4,17 @@ creation_rules:
   # Codename -> real names of each tenant; the pull request identity must read it to plan.
   - path_regex: ^tenants\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
+  # Identifiers and addresses the bootstrap needs and that are not public (ADR-0008).
+  - path_regex: ^bootstrap/inputs\.enc\.yaml$
+    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
   # Credentials that only read.
   - path_regex: ^secrets/plan\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
   # Credentials that can change resources, one file each: only the identity that applies from main decrypts
-  # them, no person does. A person replaces a file without being able to read it.
+  # them, no person does: their key is alone in a key ring closed to every person. A person replaces a file
+  # without being able to read it.
   - path_regex: ^secrets/apply/[A-Z0-9_]+\.enc\.yaml$
-    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-apply
+    gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure-apply/cryptoKeys/secrets-apply
   # Recovery codes of the accounts: only the founder decrypts them, never the pipeline.
   - path_regex: ^secrets/recovery\.enc\.yaml$
     gcp_kms: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/recovery

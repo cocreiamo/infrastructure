@@ -47,6 +47,6 @@ How a resource made by hand comes under code without being recreated
 
 ## Where the result goes
 
-The code goes in the directory of its provider (`gcp/`, `github/`,
-`cloudflare/`, or `bootstrap/`). A resource left out on purpose is named in
+The code goes in the directory of its capability (`bootstrap/`,
+`organization/`, `source-control/`, `dns/` and the others of ADR 0003). A resource left out on purpose is named in
 the pull request that adopts its neighbours.

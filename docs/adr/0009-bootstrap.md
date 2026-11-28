@@ -60,14 +60,17 @@ from changing its own permissions.
    with a local state, which is then migrated into the state bucket. From
    then on its state is kept like any other, but its changes are still
    applied by hand, never by the pipeline.
-4. It is built from published modules where they fit
-   (`terraform-google-modules` for the project and for the federation with
-   GitHub), pinned by version.
+4. It is built from published modules where they fit. The federation with
+   GitHub is the module `gh-oidc` of
+   `terraform-google-modules/github-actions-runners`, pinned by version. The
+   project, the keys and the state store are plain resources: each is
+   adopted or protected with `prevent_destroy`, which a module cannot
+   declare for its caller, and each is one resource.
 5. **Three things were created by hand, once, on 2026-11-27**, and are
    imported like any existing resource: the repository, with `gh`; the
    project `cocreiamo-infrastructure`; and its key ring `infrastructure` in
-   `europe` with the keys `state`, `secrets-plan` and `secrets-apply`, with
-   `gcloud`. The keys came first because the secrets of the previous
+   `europe` with the keys `state`, `secrets-plan`, `secrets-apply` and
+   `recovery`, with `gcloud`. The keys came first because the secrets of the previous
    repository had to be re-encrypted before anything else.
 6. **The federation and the service accounts are created new** in that
    project: they cannot be moved from the old one, which is closed once
@@ -88,9 +91,13 @@ from changing its own permissions.
 
 ### Confirmation
 
-Requirements R7, R8, R9 and R12 state what must hold; their tests are not
-written. The steps will be a runbook in `docs/runbooks/`. Nothing is built
-yet.
+Requirements R7, R8, R9 and R12 state what must hold. R12 has its test.
+R9 is half met: the budget and the contacts are written, but the founder is
+alone and there is no second contact yet. R7 and R8 are verified by a plan
+after the apply and have no automated test yet. The steps
+are in [the runbook](../runbooks/bootstrap.md). The unit is written and
+applied since 2026-11-28, with its state in the state store, and a plan
+made after it reported no difference.
 
 ## Pros and Cons of the Options
 

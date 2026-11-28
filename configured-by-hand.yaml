@@ -19,8 +19,8 @@ secrets_and_keys:
 created_by_hand_to_import:
   - what: this repository
     why: it had to exist before its own settings could be described (ADR-0009); created on 2026-11-27
-  - what: the Google Cloud project that holds state and keys, its key ring and three keys
-    why: the secrets of the previous repository had to be re-encrypted before anything else (ADR-0009); created on 2026-11-27
+  - what: the Google Cloud project that holds state and keys, its key ring and four keys
+    why: the secrets of the previous repository had to be re-encrypted before anything else (ADR-0009); created on 2026-11-27, adopted by bootstrap/
   - what: the rules of the main branch and the security settings of this repository
     why: the guardrails came before the code; applied on 2026-11-27 from .github/rulesets/main.json
 
@@ -67,12 +67,14 @@ github:
     why: it deploys the sites of two tenants; it goes when they leave Hostinger
   - what: the Renovate application of its vendor
     why: it proposes updates (ADR-0010); installing an application is an act of the owner in the browser
+  - what: in the console of that vendor, the organization left silent and pull requests turned on for this repository and one other
+    why: the vendor's console has no interface; set on 2026-11-28
   - what: the archived repositories
     why: nothing changes on them, and GitHub refuses to read their settings
 
 google_workspace:
   - what: domain-wide delegation of the two service accounts of the pipeline
-    why: the Admin console has no interface for it; to be redone for the new service accounts (ADR-0009)
+    why: the Admin console has no interface for it; done on 2026-11-28 for the two identities of the bootstrap, read-only scopes for the one that plans
   - what: recovery email and phone of the founder
     why: personal data, never in git
   - what: the organizational unit and the role assignments that Google creates by itself
@@ -81,6 +83,8 @@ google_workspace:
     why: no interface
 
 google_cloud:
+  - what: the role that writes deny policies, granted to the founder on the organization
+    why: the bootstrap needs it before any code can run; granted on 2026-11-28, to be described with the organization
   - what: the billing account and its payment profile
     why: no interface; the roles on it are described by the code
   - what: the consent screen and the client of the Google sign-in used by Cloudflare Access
