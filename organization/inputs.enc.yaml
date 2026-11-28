@@ -1,0 +1,16 @@
+organization_id: ENC[AES256_GCM,data:tfJNtK7x5OwCJUY=,iv:pVOE3vvewJ8gRTARMuS+tjoybBnxVhp5B6h2fO5iYaM=,tag:pppiJdV6Xna1s47XI5jWZg==,type:str]
+owner: ENC[AES256_GCM,data:1N+KKCOp8xaeztBNSFo8liMYTPO38In4r6N+6jgzLA==,iv:tX4xuAvaHbc0zjJIq2un70WVCiQjtnp1VeWY43JsXcY=,tag:r3Cbe9DN9mq+yxisxeGkBQ==,type:str]
+workspace_customers:
+    - ENC[AES256_GCM,data:TjtTODh3Dj3D,iv:Oeh9JZ5fg1SqjsZ6UxqfMdpg2dsG0YUNCFBssjVMS+Q=,tag:FCaLLx1Hs8I/AthuEIgivg==,type:str]
+    - ENC[AES256_GCM,data:6E3fM1Hc7I0d,iv:gno5NrI2nObHgc5pOWO/eirN3RQf4J8U2WAwBjnoXu4=,tag:+oeF5iSXm4QVAJYHzRbiRw==,type:str]
+owner_contact: ENC[AES256_GCM,data:1g==,iv:nYu5lMgX/xd76+flMyUWFTILPtYZ6zjW9F84fhJpA10=,tag:h+0PKuoCktQ1KF1tZUYnpw==,type:str]
+ventures_folder: ENC[AES256_GCM,data:e5Q7OafUGgZxWrIo,iv:cuKuD5JukM3gU+q7VQJpTUrwB5+1m3Dz8uWPu2tf/TQ=,tag:8LnXY8sG1F8K0Gok1TS0iw==,type:str]
+sops:
+    gcp_kms:
+        - created_at: "2026-11-28T10:21:22Z"
+          enc: CiQASNTjEuOJBfOEGeWDxVO2qBJ8Fams3SXh/aUQF1/WK4LqjLQSSQAQ32DrUVP2mWGL74uAjm3TVkFHACPs2upZHj/oOt7paCWa/DkM0ZCZveH+EeLRlngZmziafDssIYt/vBJz/0JoSvRa9cqIeps=
+          resource_id: projects/cocreiamo-infrastructure/locations/europe/keyRings/infrastructure/cryptoKeys/secrets-plan
+    lastmodified: "2026-11-28T10:21:22Z"
+    mac: ENC[AES256_GCM,data:BJOf1Lev3jZmlyJcNziDcJlCbFmzDZzmConqv3s6LcnK/8RznBhZWdEiT/D0nS/+gjt7fyARr7wf33KxCyGxCBJ8zX/BzM3neJH2UqBI5If0Kcc8UmxMt+MQVfYBPM2eo5JQwTTUNjFVjXkvn5yufNs9Dfo+wnzP7tiGvPsg3jM=,iv:ZF/nXCckI/3J/JijjLhfiXlzhlOKkN8XJybsiaNAs5Y=,tag:tfA24mvr7ZUIsMYfSC7/QQ==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.13.3
