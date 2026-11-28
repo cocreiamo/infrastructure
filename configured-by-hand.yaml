@@ -74,7 +74,7 @@ github:
 
 google_workspace:
   - what: domain-wide delegation of the two service accounts of the pipeline
-    why: the Admin console has no interface for it; to be redone for the new service accounts (ADR-0009)
+    why: the Admin console has no interface for it; done on 2026-11-28 for the two identities of the bootstrap, read-only scopes for the one that plans
   - what: recovery email and phone of the founder
     why: personal data, never in git
   - what: the organizational unit and the role assignments that Google creates by itself

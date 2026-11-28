@@ -70,7 +70,10 @@ already encrypted with the `state` key, and is moved afterwards.
    the public history, readable with the superseded key, until the
    credential they hold is no longer valid.
 7. In the Admin console of the workspace, delegate domain-wide authority to
-   the two new identities (`configured-by-hand.yaml`).
+   the two new identities (`configured-by-hand.yaml`): the scopes of the
+   directory for users, groups, domains, organizational units and roles,
+   read-only for the identity that plans, and the settings of groups for
+   both.
 
 ## What cannot be undone by a change
 
