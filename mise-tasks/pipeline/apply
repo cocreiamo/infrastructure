@@ -12,6 +12,7 @@ cd "$root"
 mkdir -p "$out/log"
 rm -f "$out/report.json"
 sign_in
+credentials apply
 
 filter=()
 while read -r unit; do

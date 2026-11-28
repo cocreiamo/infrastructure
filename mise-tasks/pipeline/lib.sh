@@ -18,6 +18,28 @@ sign_in() {
     fi
 }
 
+# credentials plan|apply: put the credentials of the platforms in the
+# environment of this command, where each provider looks for its own
+# (ADR-0005). Each is named like the variable its provider reads. The ones
+# that only read come first; "apply" then replaces them with the ones that
+# change, which only the identity that applies can decrypt. No value is
+# printed or written to a file.
+credentials() {
+    local pair file
+    while IFS= read -r -d '' pair; do
+        export "${pair?}"
+    done < <(sops decrypt --output-type json "$root/secrets/plan.enc.yaml" |
+        jq -j 'to_entries[] | "\(.key)=\(.value)\u0000"')
+    if [ "$1" = apply ]; then
+        for file in "$root"/secrets/apply/*.enc.yaml; do
+            while IFS= read -r -d '' pair; do
+                export "${pair?}"
+            done < <(sops decrypt --output-type json "$file" |
+                jq -j 'to_entries[] | "\(.key)=\(.value)\u0000"')
+        done
+    fi
+}
+
 # seal <name>: encrypt .cache/pipeline/log/<name>.log into the artifact, with
 # the key .sops.yaml gives to that path. A log that cannot be encrypted is
 # not kept in clear anywhere.
