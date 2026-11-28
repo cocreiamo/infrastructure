@@ -88,7 +88,7 @@ google_cloud:
   - what: the billing account and its payment profile
     why: no interface; the roles on it are described by the code
   - what: the consent screen and the client of the Google sign-in used by Cloudflare Access
-    why: to be created again in the new project (ADR-0009); the client secret is a secret of secrets/
+    why: a client and its consent screen can only be created in the browser; created on 2026-11-28 in the project of the bootstrap, for members of the organization only, with its id and secret in secrets/apply/
 
 amazon_web_services:
   - what: the root user and its passkey
