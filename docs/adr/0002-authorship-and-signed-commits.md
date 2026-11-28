@@ -51,7 +51,7 @@ because it is the only option that makes authorship verifiable.
 
 ### Confirmation
 
-The ruleset of `main` requires signatures (`.github/rulesets/main.json`,
+The ruleset of `main` requires signatures (`source-control/rules.tf`,
 requirement R20). The ruleset is applied after the first push.
 
 ## Pros and Cons of the Options

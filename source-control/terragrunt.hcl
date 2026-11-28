@@ -36,5 +36,15 @@ generate "imports" {
       to = github_membership.owner
       id = "$${local.organization}:$${var.owner_username}"
     }
+
+    import {
+      for_each = {
+        infrastructure-main = "28245499"
+        anima-main          = "28234939"
+        anima-main-green    = "28238193"
+      }
+      to = github_repository_ruleset.this[each.key]
+      id = "$${local.rules[each.key].repository}:$${each.value}"
+    }
   IMPORTS
 }
